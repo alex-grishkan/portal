@@ -1,0 +1,10 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+		<img style="padding-right:5px" src="../../favicon.ico">
+    <h1>Patient Portal</h1>
+      <a mat-button routerLink="/results" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Results</a>
+			<a mat-button routerLink="/profile" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Profile</a>
+			<span class="fill-space"></span>
+      <a mat-button>Logout</a>
+	</mat-toolbar-row>
+</mat-toolbar>

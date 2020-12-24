@@ -1,0 +1,21 @@
+<div flex fxLayout="column" fxLayoutAlign="space-around center" style="padding-top:10vh">
+		<div>
+		<form [formGroup]="authForm" (ngSubmit)="onLogin()">
+			<div>
+				<mat-form-field style="width:40vw !important">
+					<input matInput type="text" placeholder="Username" autocomplete="username" formControlName="username">
+				</mat-form-field>
+			</div>
+
+			<div>
+				<mat-form-field style="width:30vw !important">
+					<input matInput type="password" placeholder="Password" autocomplete="current-password" formControlName="password">
+				</mat-form-field>
+			</div>
+
+			<div style="text-align: left">
+				<button type="submit" mat-flat-button color="primary" [disabled]="!authForm.valid">Login</button>
+			</div>
+		</form>
+		</div>
+	</div>
