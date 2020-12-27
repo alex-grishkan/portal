@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+
+import { User } from '../store/user.model';
+import * as AppActions from '../store/app.actions';
+import * as fromApp from '../store/app.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -8,10 +13,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AuthComponent implements OnInit {
 
-  constructor() { }
+  constructor(private store: Store<{appStore: fromApp.AppState}>) { }
 
-  authForm = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.email]),
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
   });
 
@@ -19,6 +24,11 @@ export class AuthComponent implements OnInit {
   }
 
   onLogin() {
-    console.log(this.authForm.value);
+    const user = new User(
+      this.loginForm.get('email').value, 
+      this.loginForm.get('email').value,
+      'token',
+      new Date());
+    this.store.dispatch(new AppActions.Login(user));
   }
 }

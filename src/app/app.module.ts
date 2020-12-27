@@ -12,11 +12,16 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 
+import { StoreModule } from '@ngrx/store';
+
 import { HeaderComponent } from './header/header.component';
 import { AuthComponent } from './auth/auth.component';
 import { ResultListComponent } from './result-list/result-list.component';
 import { ResultViewComponent } from './result-view/result-view.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -25,7 +30,9 @@ import { ProfileComponent } from './profile/profile.component';
     AuthComponent,
     ResultListComponent,
     ResultViewComponent,
-    ProfileComponent
+    ProfileComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +44,8 @@ import { ProfileComponent } from './profile/profile.component';
     MatButtonModule,
     MatProgressBarModule,
     MatInputModule,
-    MatCardModule
+    MatCardModule,
+    StoreModule.forRoot({appStore: fromApp.AppReducer}),
   ],
   providers: [],
   bootstrap: [AppComponent]
