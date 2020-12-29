@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
@@ -13,7 +14,9 @@ import * as fromApp from '../store/app.reducer';
 })
 export class AuthComponent implements OnInit {
 
-  constructor(private store: Store<{appStore: fromApp.AppState}>) { }
+  constructor(
+    private store: Store<{appStore: fromApp.AppState}>,
+    private router: Router) { }
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -25,10 +28,11 @@ export class AuthComponent implements OnInit {
 
   onLogin() {
     const user = new User(
-      this.loginForm.get('email').value, 
+      '1', 
       this.loginForm.get('email').value,
       'token',
       new Date());
     this.store.dispatch(new AppActions.Login(user));
+    this.router.navigate(['results']);
   }
 }
