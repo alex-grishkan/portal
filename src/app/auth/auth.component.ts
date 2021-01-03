@@ -13,6 +13,7 @@ import * as fromApp from '../store/app.reducer';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
+  hidePassword = true;
 
   constructor(
     private store: Store<{appStore: fromApp.AppState}>,

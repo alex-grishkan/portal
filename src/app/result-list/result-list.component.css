@@ -1,0 +1,8 @@
+tr.mat-header-row {
+	font-weight: bold;
+	height: 40px !important;
+}
+
+tr.mat-row {
+	height: 40px !important;
+}

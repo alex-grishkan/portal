@@ -11,6 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from "@angular/material/icon";
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 import { StoreModule } from '@ngrx/store';
 
@@ -45,6 +49,10 @@ import * as fromApp from './store/app.reducer';
     MatProgressBarModule,
     MatInputModule,
     MatCardModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
     StoreModule.forRoot({appStore: fromApp.AppReducer}),
   ],
   providers: [],

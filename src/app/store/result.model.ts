@@ -6,6 +6,7 @@ export class Result {
 		public patientDOB: Date,
 		public accession: string,
 		public dateOfService: Date,
-		public reportDate: Date
+		public reportDate: Date,
+		public testList: string
 	) {}
 }
