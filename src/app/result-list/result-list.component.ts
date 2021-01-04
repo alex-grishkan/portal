@@ -47,5 +47,6 @@ export class ResultListComponent implements OnInit, AfterViewInit {
 
   onViewReport(resultId: string) {
     const modWindowRef = this.modWindow.open(ResultViewComponent, { data: {resultId: resultId} });
+    modWindowRef.updateSize('60vw', '80vh');
   }
 }
