@@ -2,16 +2,21 @@ import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog'; 
+import { delay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
+import * as AppActions from '../store/app.actions';
 import * as fromApp from '../store/app.reducer';
 import { Result } from '../store/result.model';
+import { ResultViewComponent } from '../result-view/result-view.component';
 
 @Component({
   selector: 'app-result-list',
   templateUrl: './result-list.component.html',
   styleUrls: ['./result-list.component.css']
 })
+
 export class ResultListComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Result>();
   displayColumns = ['dateOfService', 'patientName', 'patientDOB', 'accession', 'reportDate', 'testList', 'details'];
@@ -30,7 +35,9 @@ export class ResultListComponent implements OnInit, AfterViewInit {
     });
   }
   
-  constructor(private store: Store<{appStore: fromApp.AppState}>) {}
+  constructor(
+    private store: Store<{appStore: fromApp.AppState}>,
+    private modWindow: MatDialog) {}
 
   ngOnInit(): void {
     this.store.select('appStore').subscribe((appStore) => {
@@ -39,6 +46,6 @@ export class ResultListComponent implements OnInit, AfterViewInit {
   }
 
   onViewReport(resultId: string) {
-    alert('View report of ' + resultId + ' result');
+    const modWindowRef = this.modWindow.open(ResultViewComponent, { data: {resultId: resultId} });
   }
 }

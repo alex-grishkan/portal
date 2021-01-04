@@ -3,11 +3,13 @@ import { User } from '../store/user.model';
 import { Result } from './result.model';
 
 export interface AppState {
+	appProgress: boolean;
 	user: User;
 	results: Result[];
 }
 
 const initialState: AppState = {
+	appProgress: false,
 	user: null,
 	results: [
 		{ id: 'M1234567', patientName: 'John Doe', patientDOB: new Date('1961-03-21'), accession: 'M1234567', dateOfService: new Date('2020-11-01 10:00'), reportDate: new Date('2020-11-03'), testList: 'COVID-19' },
@@ -26,9 +28,10 @@ export function AppReducer(state: AppState = initialState, action: AppActions.Ap
 		case AppActions.LOGOUT:
 			return {
 				...state,
+				appProgress: false,
 				user: null,
 				results: null
-			}
+			};
 		default:
 			return state
 	}
