@@ -23,30 +23,28 @@ export class ResultListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  constructor(
+    private store: Store<{appStore: fromApp.AppState}>,
+    private modWindow: MatDialog) {}
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.sort.initialized.subscribe(() => {
-      this.dataSource.sort = this.sort;
-    });
+    // this.sort.initialized.subscribe(() => {
+    //   this.dataSource.sort = this.sort;
+    // });
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
       this.dataSource.sort = this.sort;
     });
   }
-  
-  constructor(
-    private store: Store<{appStore: fromApp.AppState}>,
-    private modWindow: MatDialog) {}
 
   ngOnInit(): void {
     this.store.select('appStore').subscribe((appStore) => {
-      if (!this.dataSource) {
-        this.dataSource = new MatTableDataSource(appStore.results);
-      }
+      this.dataSource = new MatTableDataSource(appStore.results);
     });
   }
 
   onViewReport(resultId: string) {
-    this.modWindow.open(ResultViewComponent, { data: {resultId: resultId} }).updateSize('60vw', '80vh');
+    this.modWindow.open(ResultViewComponent, { data: {resultId: resultId} }).updateSize('60vw', '65vh');
   }
 }
