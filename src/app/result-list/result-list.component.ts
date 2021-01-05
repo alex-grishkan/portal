@@ -3,7 +3,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog'; 
-import { delay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import * as AppActions from '../store/app.actions';
@@ -41,12 +40,13 @@ export class ResultListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.store.select('appStore').subscribe((appStore) => {
-      this.dataSource = new MatTableDataSource(appStore.results);
+      if (!this.dataSource) {
+        this.dataSource = new MatTableDataSource(appStore.results);
+      }
     });
   }
 
   onViewReport(resultId: string) {
-    const modWindowRef = this.modWindow.open(ResultViewComponent, { data: {resultId: resultId} });
-    modWindowRef.updateSize('60vw', '80vh');
+    this.modWindow.open(ResultViewComponent, { data: {resultId: resultId} }).updateSize('60vw', '80vh');
   }
 }

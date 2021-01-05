@@ -32,6 +32,11 @@ export function AppReducer(state: AppState = initialState, action: AppActions.Ap
 				user: null,
 				results: null
 			};
+		case AppActions.APP_PROGRESS:
+			return {
+				...state,
+				appProgress: action.payload
+			};
 		default:
 			return state
 	}
