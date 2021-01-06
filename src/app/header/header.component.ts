@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import * as AppActions from '../store/app.actions';
+import * as AuthActions from '../auth/store/auth.actions';
 import * as fromApp from '../store/app.reducer';
 
 @Component({
@@ -14,17 +14,17 @@ export class HeaderComponent implements OnInit {
   isAuthenticated = false;
 
   constructor(
-    private store: Store<{appStore: fromApp.AppState}>,
+    private store: Store<fromApp.AppState>,
     private router: Router) { }
 
   ngOnInit(): void {
-    this.store.select('appStore').subscribe((appStore) => {
-      this.isAuthenticated = !!appStore.user;
+    this.store.select('auth').subscribe((auth) => {
+      this.isAuthenticated = !!auth.user;
     })
   }
 
   onLogout() {
-    this.store.dispatch(new AppActions.Logout());
+    this.store.dispatch(new AuthActions.Logout());
     this.router.navigate(['']);
   }
 }

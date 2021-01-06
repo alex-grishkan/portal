@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 
 import * as fromApp from './store/app.reducer';
-import { User } from "./store/user.model";
+import { User } from "./auth/user.model";
 
 @Injectable({providedIn: 'root'})
 export class AppGuard implements CanActivate {
@@ -12,10 +12,12 @@ export class AppGuard implements CanActivate {
 
 	constructor(
 		private router: Router,
-		private store: Store<{appStore: fromApp.AppState}>) {}
+		private store: Store<fromApp.AppState>) {}
 
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree> {
-		this.store.select('appStore').subscribe(appStore => { this.user = appStore.user });
+		this.store.select('auth').subscribe(auth => {
+			this.user = auth.user
+		});
 
 		if (!!this.user) {
 			return true;

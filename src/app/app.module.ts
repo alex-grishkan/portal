@@ -55,7 +55,7 @@ import * as fromApp from './store/app.reducer';
     MatTableModule,
     MatSortModule,
     MatDialogModule,
-    StoreModule.forRoot({appStore: fromApp.AppReducer}),
+    StoreModule.forRoot(fromApp.appReducer),
   ],
   providers: [],
   bootstrap: [AppComponent]

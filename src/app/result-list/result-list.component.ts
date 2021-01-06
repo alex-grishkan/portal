@@ -5,9 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog'; 
 import { Store } from '@ngrx/store';
 
-import * as AppActions from '../store/app.actions';
 import * as fromApp from '../store/app.reducer';
-import { Result } from '../store/result.model';
+import { Result } from './result.model';
 import { ResultViewComponent } from '../result-view/result-view.component';
 
 @Component({
@@ -24,7 +23,7 @@ export class ResultListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private store: Store<{appStore: fromApp.AppState}>,
+    private store: Store<fromApp.AppState>,
     private modWindow: MatDialog) {}
 
   ngAfterViewInit() {
@@ -39,8 +38,10 @@ export class ResultListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.store.select('appStore').subscribe((appStore) => {
-      this.dataSource = new MatTableDataSource(appStore.results);
+    this.store.select('result').subscribe((result) => {
+      if (result.results) {
+        this.dataSource = new MatTableDataSource(result.results);
+      }
     });
   }
 
