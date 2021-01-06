@@ -1,3 +1,5 @@
-<app-header></app-header>
-<mat-progress-bar mode="indeterminate" style="padding-top:1px" *ngIf="appProgress"></mat-progress-bar>
-<router-outlet></router-outlet>
+<div class="mat-app-background">
+	<app-header></app-header>
+	<mat-progress-bar mode="indeterminate" style="padding-top:1px" *ngIf="appProgress"></mat-progress-bar>
+	<router-outlet></router-outlet>
+</div>

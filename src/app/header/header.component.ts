@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import * as AuthActions from '../auth/store/auth.actions';
+import * as ResultActions from '../result-list/store/result-list.actions';
 import * as fromApp from '../store/app.reducer';
 
 @Component({
@@ -25,6 +26,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.store.dispatch(new AuthActions.Logout());
+    this.store.dispatch(new ResultActions.Reset())
     this.router.navigate(['']);
   }
 }

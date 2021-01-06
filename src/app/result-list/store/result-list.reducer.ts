@@ -16,6 +16,11 @@ export function ResultReducer(state: State = initialState, action: ResultActions
 				...state,
 				results: action.payload
 			};
+			case ResultActions.RESET:
+				return {
+					...state,
+					results: null
+				};			
 		default:
 			return state
 	}
