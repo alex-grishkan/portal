@@ -1,1 +1,14 @@
-<p>profile works!</p>
+<div flex fxLayout="column" fxLayoutAlign="space-around center" style="padding-top:10vh">
+	<form [formGroup]="profileForm" (ngSubmit)="onSave()">
+		<div>
+			<!-- <mat-form-field style="width:30vw"> -->
+				<mat-slide-toggle color="primary" formControlName="theme">Dark mode</mat-slide-toggle>
+			<!-- </mat-form-field> -->
+			<p></p>
+		</div>
+
+		<div style="text-align: center">
+			<button type="submit" mat-flat-button color="primary" [disabled]="!profileForm.valid">Save</button>
+		</div>
+	</form>
+</div>
