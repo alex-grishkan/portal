@@ -17,6 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from "@angular/material//dialog";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
 
 import { StoreModule } from '@ngrx/store';
 
@@ -57,6 +58,7 @@ import * as fromApp from './store/app.reducer';
     MatSortModule,
     MatDialogModule,
     MatSlideToggleModule,
+    MatSelectModule,
     StoreModule.forRoot(fromApp.appReducer),
   ],
   providers: [],

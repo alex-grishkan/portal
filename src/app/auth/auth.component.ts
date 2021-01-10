@@ -47,7 +47,7 @@ export class AuthComponent implements OnInit {
       ];
       this.store.dispatch(new ResultActions.Load(results));
       this.store.dispatch(new AppActions.AppProgress(false));
-    }, 2000);
+    }, 1000);
 
     this.router.navigate(['results']);
   }
