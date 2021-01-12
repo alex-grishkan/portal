@@ -35,7 +35,10 @@ export class AppComponent implements OnInit {
     this.isThemeDark = darkMode;
     this.activeTheme = theme;
     
-    const cssClass = (this.isThemeDark ? theme + '-dark' : theme);
+    const cssClass = (darkMode ? 'darkMode' : null);
+
+    console.log(this.activeThemeCssClass);
+    console.log(cssClass);
 
     if (this.activeThemeCssClass !== cssClass) {
       const classList = this.overlayContainer.getContainerElement().classList;
