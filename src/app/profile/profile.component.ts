@@ -17,19 +17,18 @@ export class ProfileComponent implements OnInit {
               private router: Router) { }
 
   profileForm = new FormGroup({
-    appTheme: new FormControl(null),
     appDarkMode: new FormControl(false)
   });
 
   ngOnInit(): void {
     this.store.select('app').subscribe((style) => {
-      const x = {appTheme: style.appTheme, appDarkMode: style.appDarkMode};
+      const x = {appDarkMode: style.appDarkMode};
       this.profileForm.patchValue(x);
     })
   }
 
   onSave() {
-    const x = {appTheme: this.profileForm.get('appTheme').value, appDarkMode: this.profileForm.get('appDarkMode').value};
+    const x = {appDarkMode: this.profileForm.get('appDarkMode').value};
     this.store.dispatch(new AppActions.AppStyle(x));
 
     this.router.navigate(['results']);

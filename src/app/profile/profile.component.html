@@ -1,18 +1,13 @@
-<div flex fxLayout="column" fxLayoutAlign="space-around center" style="padding-top:10vh">
-	<form [formGroup]="profileForm" (ngSubmit)="onSave()">
-		<mat-form-field style="width:30vw">
-			<mat-select placeholder="Theme" formControlName="appTheme">
-				<mat-option value="indigo-pink">indigo-pink</mat-option>
-				<mat-option value="deeppurple-amber">deeppurple-amber</mat-option>
-				<mat-option value="pink-bluegrey">pink-bluegrey</mat-option>
-				<mat-option value="purple-green">purple-green</mat-option>
-			</mat-select>
-		</mat-form-field>
+<div flex fxLayout="row" fxLayoutAlign="center" style="padding-top:10vh">
+	<div style="width: 30vw">
+		<form [formGroup]="profileForm" (ngSubmit)="onSave()">
 
-		<mat-slide-toggle formControlName="appDarkMode" style="margin-left: 16px;">Dark mode</mat-slide-toggle>
+			<p>Slide toggle to turn on dark mode</p>
+			<mat-slide-toggle formControlName="appDarkMode">Dark Mode</mat-slide-toggle>
 
-		<div style="text-align: center; margin-top:100px">
-			<button type="submit" mat-flat-button color="primary" [disabled]="!profileForm.valid">Save</button>
-		</div>
-	</form>
+			<div style="text-align: left; margin-top:100px">
+				<button type="submit" mat-flat-button color="primary" [disabled]="!profileForm.valid">Save</button>
+			</div>
+		</form>
+	</div>
 </div>

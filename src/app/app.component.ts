@@ -12,8 +12,7 @@ import * as fromApp from '../app/store/app.reducer';
 
 export class AppComponent implements OnInit {
   appProgress: boolean = false;
-  isThemeDark: boolean = false;
-  activeTheme: string = null;
+  darkMode: boolean = false;
 
   @HostBinding('class') activeThemeCssClass: string
 
@@ -26,19 +25,15 @@ export class AppComponent implements OnInit {
       this.appProgress = progress.appProgress;
     });
     this.store.select('app').subscribe((style) => {
-      this.setActiveTheme(style.appTheme, style.appDarkMode);
+      this.setActiveTheme(style.appDarkMode);
     })
   }
 
-  setActiveTheme(theme: string, darkMode: boolean) {
-    if (this.isThemeDark === darkMode && this.activeTheme === theme) return;
-    this.isThemeDark = darkMode;
-    this.activeTheme = theme;
+  setActiveTheme(darkMode: boolean) {
+    if (this.darkMode === darkMode) return;
+    this.darkMode = darkMode;
     
     const cssClass = (darkMode ? 'darkMode' : null);
-
-    console.log(this.activeThemeCssClass);
-    console.log(cssClass);
 
     if (this.activeThemeCssClass !== cssClass) {
       const classList = this.overlayContainer.getContainerElement().classList;
@@ -52,6 +47,6 @@ export class AppComponent implements OnInit {
   }
   
   toggleDark() {
-    this.setActiveTheme(this.activeTheme, !this.isThemeDark);
+    this.setActiveTheme(!this.darkMode);
   }
 }

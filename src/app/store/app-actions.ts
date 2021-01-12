@@ -7,7 +7,7 @@ export class AppProgress implements Action {
 
 export class AppStyle implements Action {
 	readonly type = APP_STYLE;
-	constructor(public payload: {appTheme:string, appDarkMode:boolean}) {}
+	constructor(public payload: {appDarkMode:boolean}) {}
 }
 
 export const APP_PROGRESS = '[App] AppProgress';

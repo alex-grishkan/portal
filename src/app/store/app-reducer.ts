@@ -2,14 +2,12 @@ import * as AppActions from './app-actions';
 
 export interface State {
 	appProgress: boolean,
-	appTheme: string,
 	appDarkMode: boolean
 }
 
 const initialState: State = {
 	appProgress: null,
-	appTheme: 'deeppurple-amber',
-	appDarkMode: false
+	appDarkMode: (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
 }
 
 export function App_Reducer(state: State = initialState, action: AppActions.AppActions) {
@@ -22,7 +20,6 @@ export function App_Reducer(state: State = initialState, action: AppActions.AppA
 		case AppActions.APP_STYLE:
 			return {
 				...state,
-				appTheme: action.payload.appTheme,
 				appDarkMode: action.payload.appDarkMode
 			};
 		default:

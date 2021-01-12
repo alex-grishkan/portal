@@ -2,3 +2,11 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.labelBeforeSlide {
+	vertical-align: top;
+	text-align: right;
+  line-height: 24px; 
+  margin-right:0.5rem;
+  margin-bottom:0.5rem;
+}

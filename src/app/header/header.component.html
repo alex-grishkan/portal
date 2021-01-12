@@ -2,8 +2,8 @@
   <mat-toolbar-row>
 		<img style="padding-right:5px" src="../../favicon.ico">
     <h1>Patient Portal</h1>
-      <a mat-button routerLink="/results" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="isAuthenticated">Results</a>
-			<a mat-button routerLink="/profile" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="isAuthenticated">Profile</a>
+      <a mat-button routerLink="/results" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact: true}" *ngIf="isAuthenticated">Results</a>
+			<a mat-button routerLink="/profile" routerLinkActive="mat-accent" [routerLinkActiveOptions]="{exact: true}" *ngIf="isAuthenticated">Profile</a>
 			<span class="fill-space"></span>
       <a mat-button *ngIf="isAuthenticated" (click)="onLogout()">Logout</a>
 	</mat-toolbar-row>
