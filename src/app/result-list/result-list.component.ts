@@ -28,9 +28,6 @@ export class ResultListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    // this.sort.initialized.subscribe(() => {
-    //   this.dataSource.sort = this.sort;
-    // });
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
       this.dataSource.sort = this.sort;
