@@ -5,30 +5,39 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from "@angular/material/icon";
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { MatDialogModule } from "@angular/material//dialog";
+import { MatDialogModule } from '@angular/material//dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
-import { HeaderComponent } from './header/header.component';
+import { environment } from '../environments/environment';
+
+import { AlertComponent } from './shared/alert/alert/alert.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { AuthComponent } from './auth/auth.component';
+import { HeaderComponent } from './header/header.component';
 import { ResultListComponent } from './result-list/result-list.component';
 import { ResultViewComponent } from './result-view/result-view.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+
 import * as fromApp from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -39,7 +48,9 @@ import * as fromApp from './store/app.reducer';
     ResultViewComponent,
     ProfileComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    SpinnerComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,9 +70,12 @@ import * as fromApp from './store/app.reducer';
     MatDialogModule,
     MatSlideToggleModule,
     MatSelectModule,
+    HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    EffectsModule.forRoot([AuthEffects]),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

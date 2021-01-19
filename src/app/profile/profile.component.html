@@ -1,13 +1,21 @@
-<div flex fxLayout="row" fxLayoutAlign="center" style="padding-top:10vh">
-	<div style="width: 30vw">
-		<form [formGroup]="profileForm" (ngSubmit)="onSave()">
+<div flex fxLayout="row" fxLayoutAlign="center" style="padding-top: 10vh">
+  <div style="width: 30vw">
+    <form [formGroup]="profileForm" (ngSubmit)="onSave()">
+      <p>Slide toggle to turn {{ darkMode ? "off" : "on" }} dark mode</p>
+      <mat-slide-toggle formControlName="appDarkMode"
+        >Dark Mode</mat-slide-toggle
+      >
 
-			<p>Slide toggle to turn on dark mode</p>
-			<mat-slide-toggle formControlName="appDarkMode">Dark Mode</mat-slide-toggle>
-
-			<div style="text-align: left; margin-top:100px">
-				<button type="submit" mat-flat-button color="primary" [disabled]="!profileForm.valid">Save</button>
-			</div>
-		</form>
-	</div>
+      <div style="text-align: left; margin-top: 100px">
+        <button
+          type="submit"
+          mat-flat-button
+          color="primary"
+          [disabled]="!profileForm.valid"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
