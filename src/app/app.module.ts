@@ -38,6 +38,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 
 import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
+import { ResultEffects } from './result-list/store/result-list.effects';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, ResultEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

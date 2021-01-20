@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 
 import * as fromApp from '../../store/app.reducer';
 import * as AuthActions from './auth.actions';
+import * as ResultActions from '../../result-list/store/result-list.actions';
 import { User } from '../user.model';
 
 export interface AuthResponseData {
@@ -76,6 +77,7 @@ export class AuthEffects {
         )
         .pipe(
           map((resData) => {
+            this.store.dispatch(new ResultActions.LoadStart());
             return handleAuthentication(
               resData.email,
               resData.localId,

@@ -46,48 +46,51 @@ export class AuthComponent implements OnInit {
       })
     );
 
-    this.store.dispatch(new ResultActions.LoadStart());
-    setTimeout(() => {
-      const results = [
-        {
-          patientName: 'Jane Doe',
-          patientDOB: new Date('1987-05-21'),
-          accession: 'M7654321',
-          dateOfService: new Date('2020-12-05 18:15'),
-          reportDate: new Date('2020-12-08'),
-          testList: 'CBC, CMP',
-        },
-        {
-          patientName: 'John Doe',
-          patientDOB: new Date('1961-03-21'),
-          accession: 'M1234567',
-          dateOfService: new Date('2020-11-01 10:00'),
-          reportDate: new Date('2020-11-03'),
-          testList: 'COVID-19',
-        },
-        {
-          patientName: 'Perry W. Mason',
-          patientDOB: new Date('1942-03-11'),
-          accession: 'U5433234',
-          dateOfService: new Date('2020-09-12 09:10'),
-          reportDate: new Date('2020-09-13'),
-          testList: 'HPV',
-        },
-      ];
+    // this.store.dispatch(new ResultActions.LoadStart());
+    // setTimeout(() => {
+    //   const results = [
+    //     {
+    //       patientName: 'Jane Doe',
+    //       patientDOB: new Date('1987-05-21'),
+    //       accession: 'M7654321',
+    //       dateOfService: new Date('2020-12-05 18:15'),
+    //       reportDate: new Date('2020-12-08'),
+    //       testList: 'CBC, CMP',
+    //       viewURL: 'https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=M7654321'
+    //     },
+    //     {
+    //       patientName: 'John Doe',
+    //       patientDOB: new Date('1961-03-21'),
+    //       accession: 'M1234567',
+    //       dateOfService: new Date('2020-11-01 10:00'),
+    //       reportDate: new Date('2020-11-03'),
+    //       testList: 'COVID-19',
+    //       viewURL: 'https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=M1234567'
+    //     },
+    //     {
+    //       patientName: 'Perry W. Mason',
+    //       patientDOB: new Date('1942-03-11'),
+    //       accession: 'U5433234',
+    //       dateOfService: new Date('2020-09-12 09:10'),
+    //       reportDate: new Date('2020-09-13'),
+    //       testList: 'HPV',
+    //       viewURL: 'https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=U5433234'
+    //     },
+    //   ];
 
-      // store test results in the DB
-      // this.http
-      //   .put(
-      //     'https://patientportal-ec4d6-default-rtdb.firebaseio.com//results.json',
-      //     results
-      //   )
-      //   .subscribe((response) => {
-      //     console.log(response);
-      //   });
+    //   //store test results in the DB
+    //   // this.http
+    //   //   .put(
+    //   //     'https://patientportal-ec4d6-default-rtdb.firebaseio.com//results.json',
+    //   //     results
+    //   //   )
+    //   //   .subscribe((response) => {
+    //   //     console.log(response);
+    //   //   });
 
-      this.store.dispatch(new ResultActions.LoadSuccess(results));
-    }, 1000);
+    //   this.store.dispatch(new ResultActions.LoadSuccess(results));
+    // }, 1000);
 
-    this.router.navigate(['results']);
+    this.router.navigate(['/results']);
   }
 }

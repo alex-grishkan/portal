@@ -5,6 +5,7 @@ export class Result {
     public accession: string,
     public dateOfService: Date,
     public reportDate: Date,
-    public testList: string
+    public testList: string,
+    public viewURL: string
   ) {}
 }

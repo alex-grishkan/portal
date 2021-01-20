@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./result-view.component.css'],
 })
 export class ResultViewComponent implements OnInit {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { accession: string }) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { accession: string,  }) {}
 
   ngOnInit(): void {}
 }

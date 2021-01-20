@@ -3,7 +3,7 @@ import { Result } from '../result.model';
 
 export interface State {
   results: Result[];
-  resultError: null;
+  resultError: string;
   resultSpinner: boolean;
 }
 
@@ -30,6 +30,13 @@ export function ResultReducer(
         ...state,
         results: action.payload,
         resultError: null,
+        resultSpinner: false,
+      };
+      case ResultActions.LOAD_FAIL:  
+      return {
+        ...state,
+        results: null,
+        resultError: action.payload,
         resultSpinner: false,
       };
     case ResultActions.RESET:
