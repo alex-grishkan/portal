@@ -2,18 +2,21 @@ import { Action } from '@ngrx/store';
 
 import { Result } from '../result.model';
 
-export class Load implements Action {
-	readonly type = LOAD;
-	constructor(public payload: Result[]) {}
+export class LoadStart implements Action {
+  readonly type = LOAD_START;
+}
+
+export class LoadSuccess implements Action {
+  readonly type = LOAD_SUCCESS;
+  constructor(public payload: Result[]) {}
 }
 
 export class Reset implements Action {
-	readonly type = RESET;
+  readonly type = RESET;
 }
 
-export const LOAD = '[Result] Load';
-export const RESET = '[Result] Rest';
+export const LOAD_START = '[Result] Load Start';
+export const LOAD_SUCCESS = '[Result] Load Success';
+export const RESET = '[Result] Reset';
 
-export type ResultActions =
-	| Load
-	| Reset
+export type ResultActions = LoadStart | LoadSuccess | Reset;

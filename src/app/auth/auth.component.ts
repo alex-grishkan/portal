@@ -8,6 +8,8 @@ import * as AuthActions from './store/auth.actions';
 import * as ResultActions from '../result-list/store/result-list.actions';
 import * as fromApp from '../store/app.reducer';
 
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
@@ -18,7 +20,11 @@ export class AuthComponent implements OnInit {
   authSpinner = false;
   authError = null;
 
-  constructor(private store: Store<fromApp.AppState>, private router: Router) {}
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private router: Router,
+    private http: HttpClient
+  ) {}
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -40,19 +46,10 @@ export class AuthComponent implements OnInit {
       })
     );
 
+    this.store.dispatch(new ResultActions.LoadStart());
     setTimeout(() => {
       const results = [
         {
-          id: 'M1234567',
-          patientName: 'John Doe',
-          patientDOB: new Date('1961-03-21'),
-          accession: 'M1234567',
-          dateOfService: new Date('2020-11-01 10:00'),
-          reportDate: new Date('2020-11-03'),
-          testList: 'COVID-19',
-        },
-        {
-          id: 'M7654321',
           patientName: 'Jane Doe',
           patientDOB: new Date('1987-05-21'),
           accession: 'M7654321',
@@ -61,7 +58,14 @@ export class AuthComponent implements OnInit {
           testList: 'CBC, CMP',
         },
         {
-          id: 'U5433234',
+          patientName: 'John Doe',
+          patientDOB: new Date('1961-03-21'),
+          accession: 'M1234567',
+          dateOfService: new Date('2020-11-01 10:00'),
+          reportDate: new Date('2020-11-03'),
+          testList: 'COVID-19',
+        },
+        {
           patientName: 'Perry W. Mason',
           patientDOB: new Date('1942-03-11'),
           accession: 'U5433234',
@@ -70,8 +74,18 @@ export class AuthComponent implements OnInit {
           testList: 'HPV',
         },
       ];
-      this.store.dispatch(new ResultActions.Load(results));
-      this.store.dispatch(new AppActions.AppSpinner(false));
+
+      // store test results in the DB
+      // this.http
+      //   .put(
+      //     'https://patientportal-ec4d6-default-rtdb.firebaseio.com//results.json',
+      //     results
+      //   )
+      //   .subscribe((response) => {
+      //     console.log(response);
+      //   });
+
+      this.store.dispatch(new ResultActions.LoadSuccess(results));
     }, 1000);
 
     this.router.navigate(['results']);

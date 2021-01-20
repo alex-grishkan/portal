@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 
 import * as fromApp from '../../store/app.reducer';
-import * as AppActions from '../../store/app.actions';
 import * as AuthActions from './auth.actions';
 import { User } from '../user.model';
 
