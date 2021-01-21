@@ -77,7 +77,6 @@ export class AuthEffects {
         )
         .pipe(
           map((resData) => {
-            this.store.dispatch(new ResultActions.LoadStart());
             return handleAuthentication(
               resData.email,
               resData.localId,
@@ -89,6 +88,14 @@ export class AuthEffects {
             return handleError(errorRes);
           })
         );
+    })
+  );
+
+  @Effect()
+  loginSuccess = this.actions$.pipe(
+    ofType(AuthActions.LOGIN_SUCCESS),
+    map((xyz: User) => {
+      return new ResultActions.LoadStart(xyz.id);
     })
   );
 

@@ -4,6 +4,7 @@ import { Result } from '../result.model';
 
 export class LoadStart implements Action {
   readonly type = LOAD_START;
+  constructor(public payload: string) {}
 }
 
 export class LoadSuccess implements Action {
@@ -22,7 +23,7 @@ export class Reset implements Action {
 
 export const LOAD_START = '[Result] Load Start';
 export const LOAD_SUCCESS = '[Result] Load Success';
-export const LOAD_FAIL = '[Result] Load Fail'
+export const LOAD_FAIL = '[Result] Load Fail';
 export const RESET = '[Result] Reset';
 
 export type ResultActions = LoadStart | LoadSuccess | LoadFail | Reset;

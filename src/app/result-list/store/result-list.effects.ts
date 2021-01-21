@@ -1,20 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, tap } from 'rxjs/operators';
 import { Actions, ofType, Effect } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { environment } from 'src/environments/environment';
-
 import * as fromApp from '../../store/app.reducer';
 import * as ResultListActions from './result-list.actions';
 import { Result } from '../result.model';
-
-export interface ResultResponseData {
-  results: Result[];
-}
 
 const handleSuccess = (results: Result[]) => {
   return new ResultListActions.LoadSuccess(results);
@@ -46,17 +40,13 @@ export class ResultEffects {
     ofType(ResultListActions.LOAD_START),
     switchMap((resultData: ResultListActions.LoadStart) => {
       return this.http
-        .get<ResultResponseData>(
-          'https://patientportal-ec4d6-default-rtdb.firebaseio.com/results'
-          // {
-          //   userId: resultData.payload,
-          // }
+        .get<Result[]>(
+          'https://patientportal-ec4d6-default-rtdb.firebaseio.com/results.json',
+          { params: new HttpParams().set('userId', '12345') }
         )
         .pipe(
           map((resData) => {
-            return handleSuccess(
-              resData.results
-            );
+            return handleSuccess(resData);
           }),
           catchError((errorRes) => {
             return handleError(errorRes);
