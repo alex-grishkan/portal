@@ -64,14 +64,14 @@ export class AuthEffects {
   @Effect()
   authLogin = this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
-    switchMap((authData: AuthActions.LoginStart) => {
+    switchMap((action: AuthActions.LoginStart) => {
       return this.http
         .post<AuthResponseData>(
           'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
             environment.firebaseAPIKey,
           {
-            email: authData.payload.email,
-            password: authData.payload.password,
+            email: action.payload.email,
+            password: action.payload.password,
             returnSecureToken: true,
           }
         )
@@ -94,8 +94,8 @@ export class AuthEffects {
   @Effect()
   loginSuccess = this.actions$.pipe(
     ofType(AuthActions.LOGIN_SUCCESS),
-    map((xyz: User) => {
-      return new ResultActions.LoadStart(xyz.id);
+    map((action: AuthActions.LoginSuccess) => {
+      return new ResultActions.LoadStart(action.payload.userId);
     })
   );
 

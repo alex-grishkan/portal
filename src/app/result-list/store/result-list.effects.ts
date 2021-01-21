@@ -38,11 +38,11 @@ export class ResultEffects {
   @Effect()
   loadStart = this.actions$.pipe(
     ofType(ResultListActions.LOAD_START),
-    switchMap((resultData: ResultListActions.LoadStart) => {
+    switchMap((action: ResultListActions.LoadStart) => {
       return this.http
         .get<Result[]>(
           'https://patientportal-ec4d6-default-rtdb.firebaseio.com/results.json',
-          { params: new HttpParams().set('userId', '12345') }
+          { params: new HttpParams().set('userId', action.payload) }
         )
         .pipe(
           map((resData) => {

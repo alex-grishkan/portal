@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import { Result } from './result.model';
 import { ResultViewComponent } from '../result-view/result-view.component';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-result-list',
@@ -54,9 +55,10 @@ export class ResultListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onViewReport(resultId: string) {
+  onViewReport(accession: string) {
+    console.log(accession);
     this.modWindow
-      .open(ResultViewComponent, { data: { resultId: resultId } })
-      .updateSize('60vw', '65vh');
+      .open(ResultViewComponent, { data: { accession: accession } })
+      .updateSize('60vw', '80vh');
   }
 }

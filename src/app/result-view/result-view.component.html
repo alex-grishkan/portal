@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>{{ data.accession }}</h1>
+<p mat-dialog-title>{{ data.accession }}</p>
 
 <div class="modal-view-details" style="height: 80%">
   <object
-    data={{ data.viewURL }}
+    [data]='viewURL'
     type="application/pdf"
     width="100%"
     height="100%"
