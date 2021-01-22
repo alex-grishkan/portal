@@ -10,10 +10,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class ResultViewComponent implements OnInit {
   viewURL: SafeResourceUrl;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { accession: string },
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { accession: string, viewURL: string },
               private sanitizer:DomSanitizer) {}
 
   ngOnInit(): void {
-    this.viewURL = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=' + this.data.accession);
+    this.viewURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.viewURL);
   }
 }

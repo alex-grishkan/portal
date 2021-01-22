@@ -56,7 +56,7 @@ export class AuthComponent implements OnInit {
     //       dateOfService: new Date('2020-12-05 18:15'),
     //       reportDate: new Date('2020-12-08'),
     //       testList: 'CBC',
-    //       viewURL: ''
+    //       viewURL: 'https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=U3232888'
     //     },
     //     {
     //       patientName: 'John Doe',
@@ -65,7 +65,7 @@ export class AuthComponent implements OnInit {
     //       dateOfService: new Date('2020-11-01 10:00'),
     //       reportDate: new Date('2020-11-03'),
     //       testList: 'URINALYSIS',
-    //       viewURL: ''
+    //       viewURL: 'https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=U3232903'
     //     },
     //     {
     //       patientName: 'Perry W. Mason',
@@ -74,7 +74,7 @@ export class AuthComponent implements OnInit {
     //       dateOfService: new Date('2020-09-12 09:10'),
     //       reportDate: new Date('2020-09-13'),
     //       testList: 'CMP',
-    //       viewURL: ''
+    //       viewURL: 'https://www.enzodirect.com/csp/eclhsprod/dtcapi/result?user=EDDTC&psw=EDDTC&accession=U4286641'
     //     },
     //   ];
 
@@ -91,7 +91,7 @@ export class AuthComponent implements OnInit {
     // //   this.store.dispatch(new ResultActions.LoadSuccess(results));
     //  }, 1000);
 
-    this.router.navigate(['/results']);
+    // this.router.navigate(['/results']);
   }
 
   onResetError() {

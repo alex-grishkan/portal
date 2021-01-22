@@ -1,9 +1,5 @@
 <app-spinner *ngIf="authSpinner"></app-spinner>
-<app-alert
-  [message]="authError"
-  *ngIf="authError"
-  (close)="onResetError()"
-></app-alert>
+<app-alert [message]="authError" *ngIf="authError" (close)="onResetError()"></app-alert>
 <div
   flex
   fxLayout="column"

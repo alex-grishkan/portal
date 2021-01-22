@@ -55,10 +55,9 @@ export class ResultListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onViewReport(accession: string) {
-    console.log(accession);
+  onViewReport(accession: string, viewURL: string) {
     this.modWindow
-      .open(ResultViewComponent, { data: { accession: accession } })
+      .open(ResultViewComponent, { data: { accession: accession, viewURL: viewURL } })
       .updateSize('60vw', '80vh');
   }
 }
