@@ -27,9 +27,19 @@ export class Logout implements Action {
   readonly type = LOGOUT;
 }
 
+export class ResetError implements Action {
+  readonly type = RESET_ERROR;
+}
+
 export const LOGIN_START = '[Auth] Login Start';
 export const LOGIN_SUCCESS = '[Auth] Login Success';
 export const LOGIN_FAIL = '[Auth] Login Fail';
 export const LOGOUT = '[Auth] Logout';
+export const RESET_ERROR = '[Auth] Reset Error';
 
-export type AuthActions = LoginStart | LoginSuccess | LoginFail | Logout;
+export type AuthActions =
+  | LoginStart
+  | LoginSuccess
+  | LoginFail
+  | Logout
+  | ResetError;

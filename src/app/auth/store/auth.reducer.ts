@@ -52,6 +52,11 @@ export function AuthReducer(
         authError: null,
         authSpinner: false,
       };
+    case AuthActions.RESET_ERROR:
+      return {
+        ...state,
+        authError: null,
+      };
     default:
       return state;
   }

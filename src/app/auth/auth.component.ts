@@ -93,4 +93,8 @@ export class AuthComponent implements OnInit {
 
     this.router.navigate(['/results']);
   }
+
+  onResetError() {
+    this.store.dispatch(new AuthActions.ResetError());
+  }
 }
