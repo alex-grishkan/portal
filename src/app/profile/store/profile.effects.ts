@@ -9,11 +9,11 @@ import { Store } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 
 import * as fromApp from '../../store/app.reducer';
-import * as AuthActions from './auth.actions';
-import * as ResultActions from '../../result-list/store/result-list.actions';
-import { User } from '../user.model';
+import * as AuthActions from '../../auth/store/auth.actions';
+import * as ProfileActions from './profile.actions';
+import { User } from '../../auth/user.model';
 
-export interface AuthResponseData {
+export interface ProfileResponseData {
   idToken: string;
   email: string;
   refreshToken: string;
@@ -55,23 +55,24 @@ const handleError = (errorRes: any) => {
 };
 
 @Injectable()
-export class AuthEffects {
+export class ProfileEffects {
   @Effect()
-  authLogin = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_START),
-    switchMap((action: AuthActions.LoginStart) => {
+  profileResetPasswordStart = this.actions$.pipe(
+    ofType(ProfileActions.RESETPASSWORD_START),
+    switchMap((action: ProfileActions.ResetPasswordStart) => {
+			console.log(action.payload.password);
       return this.http
-        .post<AuthResponseData>(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
-            environment.firebaseAPIKey,
+        .post<ProfileResponseData>(
+          'https://identitytoolkit.googleapis.com/v1/accounts:update?key=' + environment.firebaseAPIKey,
           {
-            email: action.payload.email,
+            idToken: action.payload.idToken,
             password: action.payload.password,
             returnSecureToken: true,
           }
         )
         .pipe(
           map((resData) => {
+						console.log(resData);
             return handleAuthentication(
               resData.email,
               resData.localId,
@@ -80,17 +81,10 @@ export class AuthEffects {
             );
           }),
           catchError((errorRes) => {
+						console.log(errorRes);
             return handleError(errorRes);
           })
         );
-    })
-  );
-
-  @Effect()
-  loginSuccess = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_SUCCESS),
-    map((action: AuthActions.LoginSuccess) => {
-      return new ResultActions.LoadStart();
     })
   );
 

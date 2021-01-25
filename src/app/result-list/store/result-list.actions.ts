@@ -4,7 +4,6 @@ import { Result } from '../result.model';
 
 export class LoadStart implements Action {
   readonly type = LOAD_START;
-  constructor(public payload: string) {}
 }
 
 export class LoadSuccess implements Action {

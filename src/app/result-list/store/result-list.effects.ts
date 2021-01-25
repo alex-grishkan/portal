@@ -40,10 +40,7 @@ export class ResultEffects {
     ofType(ResultListActions.LOAD_START),
     switchMap((action: ResultListActions.LoadStart) => {
       return this.http
-        .get<Result[]>(
-          'https://patientportal-ec4d6-default-rtdb.firebaseio.com/results.json',
-          { params: new HttpParams().set('userId', action.payload) }
-        )
+        .get<Result[]>('https://patientportal-ec4d6-default-rtdb.firebaseio.com/results.json',)
         .pipe(
           map((resData) => {
             return handleSuccess(resData);

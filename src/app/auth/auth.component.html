@@ -1,59 +1,26 @@
 <app-spinner *ngIf="authSpinner"></app-spinner>
 <app-alert [message]="authError" *ngIf="authError" (close)="onResetError()"></app-alert>
-<div
-  flex
-  fxLayout="column"
-  fxLayoutAlign="space-around center"
-  style="padding-top: 10vh"
->
+<div flex fxLayout="column" fxLayoutAlign="space-around center" style="padding-top: 10vh">
   <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
     <div>
       <mat-form-field style="width: 30vw">
-        <input
-          matInput
-          type="text"
-          placeholder="Email"
-          autocomplete="email"
-          formControlName="email"
-        />
+        <input matInput type="text" placeholder="Email" autocomplete="email" id="email" formControlName="email"/>
+        <mat-hint *ngIf="!loginForm.get('email').valid && loginForm.get('email').touched && loginForm.get('email').errors.required">Required</mat-hint>
+        <mat-hint *ngIf="!loginForm.get('email').valid && loginForm.get('email').touched && loginForm.get('email').errors.email">Incorrect format</mat-hint>
       </mat-form-field>
     </div>
 
     <div>
       <mat-form-field style="width: 30vw">
-        <input
-          matInput
-          [type]="hidePassword ? 'password' : 'text'"
-          placeholder="Password"
-          autocomplete="current-password"
-          formControlName="password"
-        />
-        <mat-icon
-          matSuffix
-          (click)="hidePassword = !hidePassword"
-          style="cursor: default"
-          >{{ hidePassword ? "visibility" : "visibility_off" }}</mat-icon
-        >
+        <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Password" autocomplete="current-password" formControlName="password"/>
+        <mat-icon matSuffix (click)="hidePassword = !hidePassword" style="cursor: default">{{ hidePassword ? "visibility" : "visibility_off" }}</mat-icon>
+        <mat-hint *ngIf="!loginForm.get('password').valid && loginForm.get('password').touched">Required</mat-hint>
       </mat-form-field>
     </div>
 
     <div style="text-align: center">
-      <button
-        type="submit"
-        mat-flat-button
-        color="primary"
-        [disabled]="!loginForm.valid"
-      >
-        Login
-      </button>
-      <button
-        type="button"
-        mat-button
-        color="Link"
-        routerLink="/forgot-password"
-      >
-        Forgot Password
-      </button>
+      <button type="submit" mat-flat-button color="primary" [disabled]="!loginForm.valid">Login</button>
+      <button type="button" mat-button color="Link" routerLink="/forgot-password">Forgot Password</button>
     </div>
   </form>
 </div>

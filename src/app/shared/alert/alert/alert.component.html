@@ -1,5 +1,11 @@
 <div class="blackdrop"></div>
 <div class="alert-box">
-	<mat-card>{{ message }}</mat-card>
-	<mat-card-actions><button type="button" mat-flat-button color="primary" (click)="onClose()">Close</button></mat-card-actions>
+	<mat-card flex class="mat-elevation-z8">
+		<mat-card-content>
+			<p>{{ message }}</p>
+		</mat-card-content>
+		<mat-card-actions style="text-align: center;">
+			<button type="button" mat-flat-button color="accent" (click)="onClose()">OK</button>
+		</mat-card-actions>
+	</mat-card>
 </div>

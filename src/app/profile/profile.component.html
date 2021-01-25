@@ -1,21 +1,44 @@
 <div flex fxLayout="row" fxLayoutAlign="center" style="padding-top: 10vh">
   <div style="width: 30vw">
     <form [formGroup]="profileForm" (ngSubmit)="onSave()">
-      <p>Slide toggle to turn {{ darkMode ? "off" : "on" }} dark mode</p>
-      <mat-slide-toggle formControlName="appDarkMode"
-        >Dark Mode</mat-slide-toggle
-      >
+      
+      <div style="margin-bottom: 12px">
+        <p>Slide toggle to turn {{ darkMode ? "off" : "on" }} dark mode</p>
+        <mat-slide-toggle formControlName="appDarkMode">Dark Mode</mat-slide-toggle>
+      </div>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Update login settings
+          </mat-panel-title>
+          <mat-panel-description>
+            Change email or password
+            <mat-icon>login</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div *ngIf="!newPassword">
+          <mat-form-field style="width: 20vw">
+            <input matInput type="text" placeholder="New Email" formControlName="newEmail" (input)="onInputEmail()" />
+          </mat-form-field>
+        </div>
+        <div *ngIf="!newEmail">
+          <mat-form-field style="width: 20vw">
+            <input matInput type="text" placeholder="New Password" formControlName="newPassword" (input)="onInputPassword()" />
+          </mat-form-field>
+        </div>
+        <div *ngIf="!newEmail">
+          <mat-form-field style="width: 20vw">
+            <input matInput type="text" placeholder="Confirm New Password" formControlName="newPasswordConfirm" (input)="onInputPassword()"/>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
 
       <div style="text-align: left; margin-top: 100px">
-        <button
-          type="submit"
-          mat-flat-button
-          color="primary"
-          [disabled]="!profileForm.valid"
-        >
-          Save
-        </button>
+        <button type="submit" mat-flat-button color="primary" [disabled]="!profileForm.valid">Save</button>
       </div>
     </form>
   </div>
 </div>
+
+<button type="button" (click)="UpdatePassword()">Update Password</button>

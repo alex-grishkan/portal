@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -37,9 +38,11 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 import { AppInterceptorService } from './app-interceptor';
+
 import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { ResultEffects } from './result-list/store/result-list.effects';
+import { ProfileEffects } from './profile/store/profile.effects';
 
 @NgModule({
   declarations: [
@@ -62,6 +65,7 @@ import { ResultEffects } from './result-list/store/result-list.effects';
     ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
+    MatExpansionModule,
     MatProgressBarModule,
     MatInputModule,
     MatCardModule,
@@ -75,7 +79,7 @@ import { ResultEffects } from './result-list/store/result-list.effects';
     HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    EffectsModule.forRoot([AuthEffects, ResultEffects]),
+    EffectsModule.forRoot([AuthEffects, ResultEffects, ProfileEffects]),
   ],
   providers: [
     {
