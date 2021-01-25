@@ -1,3 +1,6 @@
+<app-spinner *ngIf="profileSpinner"></app-spinner>
+<app-alert [message]="profileError" *ngIf="profileError"></app-alert>
+
 <div flex fxLayout="row" fxLayoutAlign="center" style="padding-top: 10vh">
   <div style="width: 30vw">
     <form [formGroup]="profileForm" (ngSubmit)="onSave()">

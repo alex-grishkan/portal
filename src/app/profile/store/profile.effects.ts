@@ -38,8 +38,8 @@ const handleAuthentication = (email: string, userId: string, token: string, expi
 const handleError = (errorRes: any) => {
   let errorMessage = 'An unknown error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
-    return of(new AuthActions.LoginFail(errorMessage));
-  }
+    return of(new ProfileActions.ResetPasswordFail(errorMessage));
+  } 
   switch (errorRes.error.error.message) {
     case 'EMAIL_EXISTS':
       errorMessage = 'This email exists already';
@@ -50,8 +50,10 @@ const handleError = (errorRes: any) => {
     case 'INVALID_PASSWORD':
       errorMessage = 'This password is not correct.';
       break;
+    default:
+      errorMessage = errorRes.error.error.message;
   }
-  return of(new AuthActions.LoginFail(errorMessage));
+  return of(new ProfileActions.ResetPasswordFail(errorMessage));
 };
 
 @Injectable()
@@ -60,7 +62,6 @@ export class ProfileEffects {
   profileResetPasswordStart = this.actions$.pipe(
     ofType(ProfileActions.RESETPASSWORD_START),
     switchMap((action: ProfileActions.ResetPasswordStart) => {
-			console.log(action.payload.password);
       return this.http
         .post<ProfileResponseData>(
           'https://identitytoolkit.googleapis.com/v1/accounts:update?key=' + environment.firebaseAPIKey,
@@ -85,14 +86,6 @@ export class ProfileEffects {
             return handleError(errorRes);
           })
         );
-    })
-  );
-
-  @Effect({ dispatch: false })
-  authRedirect = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/results']);
     })
   );
 

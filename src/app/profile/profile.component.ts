@@ -16,6 +16,9 @@ export class ProfileComponent implements OnInit {
   darkMode: boolean = false;
   newEmail: boolean = false;
   newPassword: boolean = false;
+  profileSpinner: boolean = false;
+  profileError: string = null;
+  token: string = null;
 
   constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
@@ -31,6 +34,13 @@ export class ProfileComponent implements OnInit {
       this.profileForm.patchValue({ appDarkMode: appState.appDarkMode });
       this.darkMode = appState.appDarkMode;
     });
+    this.store.select('profile').subscribe((profileState) => {
+      this.profileSpinner = profileState.profileSpinner;
+      this.profileError = profileState.profileError;
+    });
+    this.store.select('auth').subscribe((authState) => {
+      this.token = authState.user.token;
+    });
   }
 
   onInputEmail() {
@@ -43,16 +53,13 @@ export class ProfileComponent implements OnInit {
 
   onSave() {
     this.store.dispatch(new AppActions.AppStyle({ appDarkMode: this.profileForm.get('appDarkMode').value }));
-
+    // update password
+    // update email
     this.router.navigate(['results']);
   }
 
-
   UpdatePassword() {
-    console.log('Update Password');
-    this.store.select('auth').subscribe((authState) => {
-      const idToken = authState.user.token;
-      this.store.dispatch(new ProfileActions.ResetPasswordStart({ idToken: idToken, password: 'Welcome1' }));
-    });
+    const newPassword = this.profileForm.get('newPassword').value;
+    this.store.dispatch(new ProfileActions.ResetPasswordStart({ idToken: this.token, password: newPassword }));
   }
 }
