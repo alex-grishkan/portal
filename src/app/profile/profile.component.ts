@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
 
   profileForm = new FormGroup({
     appDarkMode: new FormControl(false),
-    newEmail: new FormControl(null),
+    newEmail: new FormControl(null, Validators.email),
     newPassword: new FormControl(null),
     newPasswordConfirm: new FormControl(null),
   });

@@ -4,11 +4,8 @@ import { of } from 'rxjs';
 import { switchMap, map, catchError, tap } from 'rxjs/operators';
 import { Actions, ofType, Effect } from '@ngrx/effects';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-
 import { environment } from 'src/environments/environment';
 
-import * as fromApp from '../../store/app.reducer';
 import * as AuthActions from '../../auth/store/auth.actions';
 import * as ProfileActions from './profile.actions';
 import { User } from '../../auth/user.model';
@@ -126,6 +123,5 @@ export class ProfileEffects {
     private actions$: Actions,
     private http: HttpClient,
     private router: Router,
-    private store: Store<fromApp.AppState>
   ) {}
 }
