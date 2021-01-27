@@ -1,31 +1,31 @@
 import { Action } from '@ngrx/store';
 
-export class ResetPasswordStart implements Action {
-  readonly type = RESETPASSWORD_START;
-  constructor(public payload: { idToken: string, password: string }) {}
+export class ResetAuthStart implements Action {
+  readonly type = RESETAUTH_START;
+  constructor(public payload: { idToken: string, email: string, password: string }) {}
 }
 
-export class ResetPasswordSuccess implements Action {
-  readonly type = RESETPASSWORD_SUCCESS;
-  constructor(public payload: { email: string, idToken: string, refreshToken:string, expiresIn:string }) {}
+export class ResetAuthSuccess implements Action {
+  readonly type = RESETAUTH_SUCCESS;
+  constructor(public payload: { email: string, localId: string, idToken: string, refreshToken:string, expiresIn:string }) {}
 }
 
-export class ResetPasswordFail implements Action {
-  readonly type = RESETPASSWORD_FAIL;
+export class ResetAuthFail implements Action {
+  readonly type = RESETAUTH_FAIL;
   constructor(public payload: string) {}
 }
 
-export class ResetError implements Action {
-  readonly type = RESET_ERROR;
+export class DropError implements Action {
+  readonly type = DROP_ERROR;
 }
 
-export const RESETPASSWORD_START = '[Profile] Reset Password Start';
-export const RESETPASSWORD_SUCCESS = '[Profile] Reset Password Success';
-export const RESETPASSWORD_FAIL = '[Profile] Reset Password Fail';
-export const RESET_ERROR = '[Profile] Reset Error';
+export const RESETAUTH_START = '[Profile] Reset Auth Start';
+export const RESETAUTH_SUCCESS = '[Profile] Reset Auth Success';
+export const RESETAUTH_FAIL = '[Profile] Reset Auth Fail';
+export const DROP_ERROR = '[Profile] Drop Error';
 
 export type ProfileActions =
-  | ResetPasswordStart
-  | ResetPasswordSuccess
-  | ResetPasswordFail
-  | ResetError;
+  | ResetAuthStart
+  | ResetAuthSuccess
+  | ResetAuthFail
+  | DropError;

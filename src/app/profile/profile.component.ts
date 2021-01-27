@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
       this.profileError = profileState.profileError;
     });
     this.store.select('auth').subscribe((authState) => {
-      this.token = authState.user.token;
+      if (authState.user) this.token = authState.user.token;
     });
   }
 
@@ -54,11 +54,17 @@ export class ProfileComponent implements OnInit {
   onSave() {
     this.store.dispatch(new AppActions.AppStyle({ appDarkMode: this.profileForm.get('appDarkMode').value }));
 
-    const newPassword = this.profileForm.get('newPassword').value;
     const newEmail = this.profileForm.get('newEmail').value;
-    if (!newEmail && !newPassword) { this.router.navigate(['results']); }
-    if (newPassword) { this.store.dispatch(new ProfileActions.ResetPasswordStart({ idToken: this.token, password: newPassword })); }
+    if (newEmail) {
+      this.store.dispatch(new ProfileActions.ResetAuthStart({ idToken: this.token, email: newEmail, password: null }));
+      return;
+    }
+    const newPassword = this.profileForm.get('newPassword').value;
+    if (newPassword) {
+      this.store.dispatch(new ProfileActions.ResetAuthStart({ idToken: this.token, email: null, password: newPassword }));
+      return;
+    }
 
-    if (newEmail) { this.router.navigate(['results']); }  // navigation is a part of ResetEmail effects
+    this.router.navigate(['results']);
   }
 }

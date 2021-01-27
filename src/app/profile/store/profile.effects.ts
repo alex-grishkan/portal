@@ -22,10 +22,24 @@ export interface ProfileResponseData {
   registered?: boolean;
 }
 
-const handleError = (errorRes: any) => {
+const handleResetAuthSuccess = (email: string, localId: string, idToken: string, refreshToken: string, expiresIn: string) => {
+  const expirationDate = new Date(new Date().getTime() + (+expiresIn * 1000));
+  const user = new User(email, localId, idToken, expirationDate);
+  localStorage.setItem('userData', JSON.stringify(user));
+  
+  return new ProfileActions.ResetAuthSuccess({
+    email : email,
+    localId: localId,
+    idToken : idToken,
+    refreshToken : refreshToken,
+    expiresIn : expiresIn
+  })
+}
+
+const handleResetAuthError = (errorRes: any) => {
   let errorMessage = 'An unknown error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
-    return of(new ProfileActions.ResetPasswordFail(errorMessage));
+    return of(new ProfileActions.ResetAuthFail(errorMessage));
   } 
   switch (errorRes.error.error.message) {
     case 'EMAIL_EXISTS':
@@ -40,65 +54,69 @@ const handleError = (errorRes: any) => {
     default:
       errorMessage = errorRes.error.error.message;
   }
-  return of(new ProfileActions.ResetPasswordFail(errorMessage));
+  return of(new ProfileActions.ResetAuthFail(errorMessage));
 };
 
 @Injectable()
 export class ProfileEffects {
+
   @Effect()
- resetPasswordStart = this.actions$.pipe(
-    ofType(ProfileActions.RESETPASSWORD_START),
-    switchMap((action: ProfileActions.ResetPasswordStart) => {
+  resetAuthStart = this.actions$.pipe(
+    ofType(ProfileActions.RESETAUTH_START),
+    switchMap((action: ProfileActions.ResetAuthStart) => {
+      let p = null;
+      if (action.payload.email) {
+        p = {
+          idToken: action.payload.idToken,
+          email: action.payload.email,
+          returnSecureToken: true,
+        }
+      } else {
+        p = {
+          idToken: action.payload.idToken,
+          password: action.payload.password,
+          returnSecureToken: true,
+        }
+      }
+
       return this.http
         .post<ProfileResponseData>(
-          'https://identitytoolkit.googleapis.com/v1/accounts:update?key=' + environment.firebaseAPIKey,
-          {
-            idToken: action.payload.idToken,
-            password: action.payload.password,
-            returnSecureToken: true,
-          }
+          'https://identitytoolkit.googleapis.com/v1/accounts:update?key=' + environment.firebaseAPIKey, p
         )
         .pipe(
           map((resData:ProfileResponseData) => {
-            console.log(resData);
-            
-            const expirationDate = new Date(new Date().getTime() + (+resData.expiresIn * 1000));
-            // update user in the local storage
-            // const user = new User(email, userId, token, expirationDate);
-            // localStorage.setItem('userData', JSON.stringify(user));
-          
-            return new ProfileActions.ResetPasswordSuccess({
-              email : resData.email,
-              idToken : resData.idToken,
-              refreshToken : resData.refreshToken,
-              expiresIn : resData.expiresIn
-            })
+            return handleResetAuthSuccess(
+              resData.email,
+              resData.localId,
+              resData.idToken,
+              resData.refreshToken,
+              resData.expiresIn
+            );
           }),
           catchError((errorRes) => {
-						console.log(errorRes);
-            return handleError(errorRes);
+            return handleResetAuthError(errorRes);
           })
         );
     })
   );
 
   @Effect()
-  resetPasswordSuccess = this.actions$.pipe(
-    ofType(ProfileActions.RESETPASSWORD_SUCCESS),
-    map((action: ProfileResponseData) => {
-      console.log(action);
-      return new AuthActions.UpdateUser({
-        email: action.email,
-        userId: action.localId,
-        token: action.idToken,
-        expirationDate: new Date(new Date().getTime() + (+action.expiresIn * 1000))
+  updateUser = this.actions$.pipe(
+    ofType(ProfileActions.RESETAUTH_SUCCESS),
+    map((action: ProfileActions.ResetAuthSuccess) => {
+      const user = new AuthActions.UpdateUser({
+        email: action.payload.email,
+        userId: action.payload.localId,
+        token: action.payload.idToken,
+        expirationDate: new Date(new Date().getTime() + (+action.payload.expiresIn * 1000))
       });
+      return user; 
     })
   )
 
   @Effect({ dispatch: false })
   redirect = this.actions$.pipe(
-    ofType(ProfileActions.RESETPASSWORD_SUCCESS),
+    ofType(ProfileActions.RESETAUTH_SUCCESS),
     tap(() => {
       this.router.navigate(['/results']);
     })

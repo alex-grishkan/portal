@@ -12,25 +12,25 @@ const initialState: State = {
 
 export function ProfileReducer(state: State = initialState, action: ProfileActions.ProfileActions) {
   switch (action.type) {
-    case ProfileActions.RESETPASSWORD_START:
+    case ProfileActions.RESETAUTH_START:
       return {
         ...state,
         profileError: null,
         profileSpinner: true,
       };
-    case ProfileActions.RESETPASSWORD_SUCCESS:
+    case ProfileActions.RESETAUTH_SUCCESS:
       return {
         ...state,
         profileError: null,
         profileSpinner: false,
       };
-    case ProfileActions.RESETPASSWORD_FAIL:
+    case ProfileActions.RESETAUTH_FAIL:
       return {
         ...state,
         profileError: action.payload,
         profileSpinner: false,
       };
-    case ProfileActions.RESET_ERROR:
+    case ProfileActions.DROP_ERROR:
       return {
         ...state,
         profileError: null,

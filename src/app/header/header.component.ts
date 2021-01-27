@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.store.dispatch(new AuthActions.Logout());
-    this.store.dispatch(new ResultActions.Reset())
+    this.store.dispatch(new ResultActions.Reset());
     this.router.navigate(['']);
   }
 }

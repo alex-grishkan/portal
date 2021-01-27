@@ -22,7 +22,7 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-const handleAuthentication = (email: string, userId: string, token: string, expiresIn: number) => {
+const handleSuccess = (email: string, userId: string, token: string, expiresIn: number) => {
   const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
   const user = new User(email, userId, token, expirationDate);
   localStorage.setItem('userData', JSON.stringify(user));
@@ -72,7 +72,7 @@ export class AuthEffects {
         )
         .pipe(
           map((resData) => {
-            return handleAuthentication(
+            return handleSuccess(
               resData.email,
               resData.localId,
               resData.idToken,
