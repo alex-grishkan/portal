@@ -22,19 +22,6 @@ export interface ProfileResponseData {
   registered?: boolean;
 }
 
-const handleAuthentication = (email: string, userId: string, token: string, expiresIn: number) => {
-  const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-  const user = new User(email, userId, token, expirationDate);
-  localStorage.setItem('userData', JSON.stringify(user));
-
-  return new AuthActions.LoginSuccess({
-    email: email,
-    userId: userId,
-    token: token,
-    expirationDate: expirationDate,
-  });
-};
-
 const handleError = (errorRes: any) => {
   let errorMessage = 'An unknown error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
@@ -59,7 +46,7 @@ const handleError = (errorRes: any) => {
 @Injectable()
 export class ProfileEffects {
   @Effect()
-  profileResetPasswordStart = this.actions$.pipe(
+ resetPasswordStart = this.actions$.pipe(
     ofType(ProfileActions.RESETPASSWORD_START),
     switchMap((action: ProfileActions.ResetPasswordStart) => {
       return this.http
@@ -72,20 +59,48 @@ export class ProfileEffects {
           }
         )
         .pipe(
-          map((resData) => {
-						console.log(resData);
-            return handleAuthentication(
-              resData.email,
-              resData.localId,
-              resData.idToken,
-              +resData.expiresIn
-            );
+          map((resData:ProfileResponseData) => {
+            console.log(resData);
+            
+            const expirationDate = new Date(new Date().getTime() + (+resData.expiresIn * 1000));
+            // update user in the local storage
+            // const user = new User(email, userId, token, expirationDate);
+            // localStorage.setItem('userData', JSON.stringify(user));
+          
+            return new ProfileActions.ResetPasswordSuccess({
+              email : resData.email,
+              idToken : resData.idToken,
+              refreshToken : resData.refreshToken,
+              expiresIn : resData.expiresIn
+            })
           }),
           catchError((errorRes) => {
 						console.log(errorRes);
             return handleError(errorRes);
           })
         );
+    })
+  );
+
+  @Effect()
+  resetPasswordSuccess = this.actions$.pipe(
+    ofType(ProfileActions.RESETPASSWORD_SUCCESS),
+    map((action: ProfileResponseData) => {
+      console.log(action);
+      return new AuthActions.UpdateUser({
+        email: action.email,
+        userId: action.localId,
+        token: action.idToken,
+        expirationDate: new Date(new Date().getTime() + (+action.expiresIn * 1000))
+      });
+    })
+  )
+
+  @Effect({ dispatch: false })
+  redirect = this.actions$.pipe(
+    ofType(ProfileActions.RESETPASSWORD_SUCCESS),
+    tap(() => {
+      this.router.navigate(['/results']);
     })
   );
 

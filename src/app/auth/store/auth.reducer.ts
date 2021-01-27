@@ -26,6 +26,8 @@ export function AuthReducer(
         authSpinner: true,
       };
     case AuthActions.LOGIN_SUCCESS:
+    case AuthActions.UPDATE_USER:
+      console.log(action.payload);
       const user = new User(
         action.payload.email,
         action.payload.userId,

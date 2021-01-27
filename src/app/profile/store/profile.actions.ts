@@ -7,14 +7,7 @@ export class ResetPasswordStart implements Action {
 
 export class ResetPasswordSuccess implements Action {
   readonly type = RESETPASSWORD_SUCCESS;
-
-  constructor(
-    public payload: {
-			idToken: string,
-      refreshToken:string,
-      expiresIn:string
-    }
-  ) {}
+  constructor(public payload: { email: string, idToken: string, refreshToken:string, expiresIn:string }) {}
 }
 
 export class ResetPasswordFail implements Action {

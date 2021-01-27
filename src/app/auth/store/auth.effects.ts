@@ -89,7 +89,7 @@ export class AuthEffects {
   @Effect()
   loginSuccess = this.actions$.pipe(
     ofType(AuthActions.LOGIN_SUCCESS),
-    map((action: AuthActions.LoginSuccess) => {
+    map(() => {
       return new ResultActions.LoadStart();
     })
   );

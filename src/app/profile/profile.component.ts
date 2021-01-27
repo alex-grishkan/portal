@@ -53,13 +53,12 @@ export class ProfileComponent implements OnInit {
 
   onSave() {
     this.store.dispatch(new AppActions.AppStyle({ appDarkMode: this.profileForm.get('appDarkMode').value }));
-    // update password
-    // update email
-    this.router.navigate(['results']);
-  }
 
-  UpdatePassword() {
     const newPassword = this.profileForm.get('newPassword').value;
-    this.store.dispatch(new ProfileActions.ResetPasswordStart({ idToken: this.token, password: newPassword }));
+    const newEmail = this.profileForm.get('newEmail').value;
+    if (!newEmail && !newPassword) { this.router.navigate(['results']); }
+    if (newPassword) { this.store.dispatch(new ProfileActions.ResetPasswordStart({ idToken: this.token, password: newPassword })); }
+
+    if (newEmail) { this.router.navigate(['results']); }  // navigation is a part of ResetEmail effects
   }
 }
