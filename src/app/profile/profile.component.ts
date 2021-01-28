@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -7,12 +7,11 @@ import * as fromApp from '../store/app.reducer';
 import * as AppActions from '../store/app.actions';
 import * as ProfileActions from '../profile/store/profile.actions';
 
-export const ValidatorPassword: ValidatorFn = (control: FormGroup): {[key: string]: boolean} | null => {
+const ValidatorForm: ValidatorFn = (control: FormGroup): {[key: string]: boolean} | null => {
   const newPassword = control.get('newPassword').value;
   const newPasswordConfirm = control.get('newPasswordConfirm').value;
-
-  if (newPassword && newPasswordConfirm && (newPassword !== newPasswordConfirm)) return { 'match': true }
-  return null;
+  if (newPassword === newPasswordConfirm) return null;
+  return { 'match': true };
 }
 
 @Component({
@@ -35,7 +34,7 @@ export class ProfileComponent implements OnInit {
     newEmail: new FormControl(null, Validators.email),
     newPassword: new FormControl(null),
     newPasswordConfirm: new FormControl(null)
-  }, { validators: ValidatorPassword });
+  }, { validators: ValidatorForm });
 
   ngOnInit(): void {
     this.store.select('app').subscribe((appState) => {
@@ -56,7 +55,10 @@ export class ProfileComponent implements OnInit {
   }
 
   onInputPassword() {
-    this.newPassword = (this.profileForm.get('newPassword').value || this.profileForm.get('newPasswordConfirm').value);
+    this.newPassword = (!!this.profileForm.get('newPassword').value || !!this.profileForm.get('newPasswordConfirm').value);
+    if (!!this.profileForm.get('newPasswordConfirm').value && (this.profileForm.get('newPassword').value !== this.profileForm.get('newPasswordConfirm').value)) {
+      this.profileForm.get('newPasswordConfirm').setErrors({'match': true});
+    }
   }
 
   onSave() {

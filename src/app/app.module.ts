@@ -35,7 +35,6 @@ import { ResultListComponent } from './result-list/result-list.component';
 import { ResultViewComponent } from './result-view/result-view.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 import { AppInterceptorService } from './app-interceptor';
 
@@ -53,7 +52,6 @@ import { ProfileEffects } from './profile/store/profile.effects';
     ResultViewComponent,
     ProfileComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent,
     SpinnerComponent,
     AlertComponent,
   ],

@@ -20,7 +20,7 @@
         <div *ngIf="!newPassword">
           <mat-form-field style="width: 20vw">
             <input matInput type="text" placeholder="New Email" formControlName="newEmail" (input)="onInputEmail()" />
-            <mat-hint *ngIf="!profileForm.get('newEmail').valid && profileForm.get('newEmail').touched && profileForm.get('newEmail').errors.email">Invalid format</mat-hint>
+            <mat-error *ngIf="!profileForm.get('newEmail').valid && profileForm.get('newEmail').touched && profileForm.get('newEmail').errors.email">Invalid format</mat-error>
           </mat-form-field>
         </div>
         <div *ngIf="!newEmail">
@@ -30,8 +30,8 @@
         </div>
         <div *ngIf="!newEmail && newPassword">
           <mat-form-field style="width: 20vw">
-            <input matInput type="text" placeholder="Confirm New Password" formControlName="newPasswordConfirm" />
-            <mat-hint *ngIf="!profileForm.valid && profileForm.errors.match && profileForm.get('newPasswordConfirm').touched">Should match New Password</mat-hint>
+            <input matInput type="text" placeholder="Confirm New Password" formControlName="newPasswordConfirm" (input)="onInputPassword()" />
+            <mat-error>Should match New Password</mat-error>
           </mat-form-field>
         </div>
       </mat-expansion-panel>
