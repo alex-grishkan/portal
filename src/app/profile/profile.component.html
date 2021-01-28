@@ -10,19 +10,17 @@
         <mat-slide-toggle formControlName="appDarkMode">Dark Mode</mat-slide-toggle>
       </div>
 
-      <mat-expansion-panel>
+      <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Update login settings
           </mat-panel-title>
-          <mat-panel-description>
-            Change email or password
-            <mat-icon>login</mat-icon>
-          </mat-panel-description>
+          <mat-icon>edit</mat-icon>
         </mat-expansion-panel-header>
         <div *ngIf="!newPassword">
           <mat-form-field style="width: 20vw">
             <input matInput type="text" placeholder="New Email" formControlName="newEmail" (input)="onInputEmail()" />
+            <mat-hint *ngIf="!profileForm.get('newEmail').valid && profileForm.get('newEmail').touched && profileForm.get('newEmail').errors.email">Invalid format</mat-hint>
           </mat-form-field>
         </div>
         <div *ngIf="!newEmail">
@@ -30,14 +28,15 @@
             <input matInput type="text" placeholder="New Password" formControlName="newPassword" (input)="onInputPassword()" />
           </mat-form-field>
         </div>
-        <div *ngIf="!newEmail">
+        <div *ngIf="!newEmail && newPassword">
           <mat-form-field style="width: 20vw">
-            <input matInput type="text" placeholder="Confirm New Password" formControlName="newPasswordConfirm" (input)="onInputPassword()"/>
+            <input matInput type="text" placeholder="Confirm New Password" formControlName="newPasswordConfirm" />
+            <mat-hint *ngIf="!profileForm.valid && profileForm.errors.match && profileForm.get('newPasswordConfirm').touched">Should match New Password</mat-hint>
           </mat-form-field>
         </div>
       </mat-expansion-panel>
 
-      <div style="text-align: left; margin-top: 100px">
+      <div style="text-align: center; margin-top: 100px">
         <button type="submit" mat-flat-button color="primary" [disabled]="!profileForm.valid">Save</button>
       </div>
     </form>

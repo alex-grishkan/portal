@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../store/app.reducer';
 import * as AppActions from '../store/app.actions';
 import * as ProfileActions from '../profile/store/profile.actions';
+
+export const ValidatorPassword: ValidatorFn = (control: FormGroup): {[key: string]: boolean} | null => {
+  const newPassword = control.get('newPassword').value;
+  const newPasswordConfirm = control.get('newPasswordConfirm').value;
+
+  if (newPassword && newPasswordConfirm && (newPassword !== newPasswordConfirm)) return { 'match': true }
+  return null;
+}
 
 @Component({
   selector: 'app-profile',
@@ -26,8 +34,8 @@ export class ProfileComponent implements OnInit {
     appDarkMode: new FormControl(false),
     newEmail: new FormControl(null, Validators.email),
     newPassword: new FormControl(null),
-    newPasswordConfirm: new FormControl(null),
-  });
+    newPasswordConfirm: new FormControl(null)
+  }, { validators: ValidatorPassword });
 
   ngOnInit(): void {
     this.store.select('app').subscribe((appState) => {
