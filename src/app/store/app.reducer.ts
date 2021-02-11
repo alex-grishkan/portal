@@ -1,4 +1,4 @@
-import { ActionReducerMap } from '@ngrx/store';
+import { ActionReducerMap, createReducer, on } from '@ngrx/store';
 
 import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromResult from '../result-list/store/result-list.reducer';
@@ -17,25 +17,24 @@ const initialState: State = {
     window.matchMedia('(prefers-color-scheme: dark)').matches,
 };
 
-export function App_Reducer(
-  state: State = initialState,
-  action: AppActions.AppActions
-) {
-  switch (action.type) {
-    case AppActions.APP_SPINNER:
-      return {
-        ...state,
-        appSpinner: action.payload,
-      };
-    case AppActions.APP_STYLE:
-      return {
-        ...state,
-        appDarkMode: action.payload.appDarkMode,
-      };
-    default:
-      return state;
-  }
-}
+export const App_Reducer = createReducer(
+  initialState,
+  on(
+    AppActions.AppSpinner,
+    (state, action) => ({
+      ...state,
+      appSpinner: action.on
+    })
+  ),
+
+  on(
+    AppActions.AppStyle,
+    (state, action) => ({
+      ...state,
+      appDarkMode: action.appDarkMode
+    })
+  )
+)
 
 export interface AppState {
   auth: fromAuth.State;

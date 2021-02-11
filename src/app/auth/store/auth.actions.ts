@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
 export interface user  {
     email: string;
@@ -7,45 +7,39 @@ export interface user  {
     expirationDate: Date;
   }
 
-export class LoginStart implements Action {
-  readonly type = LOGIN_START;
-  constructor(public payload: { email: string; password: string }) {}
-}
+export const LoginStart = createAction(
+  '[Auth] Login Start',
+  props<{ email: string; password: string }>()
+);
 
-export class LoginSuccess implements Action {
-  readonly type = LOGIN_SUCCESS;
-  constructor(public payload: user) {}
-}
+export const LoginSuccess = createAction(
+  '[Auth] Login Success',
+  props<user>()
+);
 
-export class LoginFail implements Action {
-  readonly type = LOGIN_FAIL;
-  constructor(public payload: string) {}
-}
+export const LoginFail = createAction(
+  '[Auth] Login Fail',
+  props<{ errorMessage: string }>()
+);
 
-export class UpdateUser implements Action {
-  readonly type = UPDATE_USER;
-  constructor(public payload: user) {}
-}
+export const UpdateUser = createAction(
+  '[Auth] Update User',
+  props<user>()
+);
 
-export class Logout implements Action {
-  readonly type = LOGOUT;
-}
+export const Logout = createAction(
+  '[Auth] Logout'
+);
 
-export class ResetError implements Action {
-  readonly type = RESET_ERROR;
-}
+export const ResetError = createAction(
+  '[Auth] Reset Error'
+);
 
-export const LOGIN_START = '[Auth] Login Start';
-export const LOGIN_SUCCESS = '[Auth] Login Success';
-export const LOGIN_FAIL = '[Auth] Login Fail';
-export const UPDATE_USER = '[Auth] Update User';
-export const LOGOUT = '[Auth] Logout';
-export const RESET_ERROR = '[Auth] Reset Error';
+export const ForgotPasswordStart = createAction(
+  '[Auth] Forgot Password Start',
+  props<{ email: string }>()
+);
 
-export type AuthActions =
-  | LoginStart
-  | LoginSuccess
-  | LoginFail
-  | UpdateUser
-  | Logout
-  | ResetError
+export const ForgotPasswordSuccess = createAction(
+  '[Auth] Forgot Password Success'
+);

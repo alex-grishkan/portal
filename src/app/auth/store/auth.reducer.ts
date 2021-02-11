@@ -1,3 +1,5 @@
+import { createReducer, on } from '@ngrx/store';
+
 import * as AuthActions from '../store/auth.actions';
 import { User } from '../user.model';
 
@@ -13,52 +15,65 @@ const initialState: State = {
   authSpinner: false,
 };
 
-export function AuthReducer(
-  state: State = initialState,
-  action: AuthActions.AuthActions
-) {
-  switch (action.type) {
-    case AuthActions.LOGIN_START:
-      return {
+export const AuthReducer = createReducer(
+  initialState,
+  on(
+    AuthActions.LoginStart,
+    AuthActions.ForgotPasswordStart,
+    (state) => ({
+      ...state,
+      user: null,
+      authError: null,
+      authSpinner: true,
+    })
+  ),
+
+  on(
+    AuthActions.LoginSuccess,
+    AuthActions.UpdateUser,
+    (state, action) => ({
+      ...state,
+      user: { email: action.email, userId: action.userId, token: action.token, expirationDate: action.expirationDate },
+      authError: null,
+      authSpinner: false,
+    })
+  ),
+
+  on(
+    AuthActions.ForgotPasswordSuccess,
+    (state) => ({
+      ...state,
+      user: null,
+      authError: null,
+      authSpinner: false,
+    })
+  ),
+
+  on(
+    AuthActions.LoginFail,
+    (state, action) => ({
         ...state,
         user: null,
-        authError: null,
-        authSpinner: true,
-      };
-    case AuthActions.LOGIN_SUCCESS:
-    case AuthActions.UPDATE_USER:
-      const user = new User(
-        action.payload.email,
-        action.payload.userId,
-        action.payload.token,
-        action.payload.expirationDate
-      );
-      return {
-        ...state,
-        user: user,
-        authError: null,
+        authError: action.errorMessage,
         authSpinner: false,
-      };
-    case AuthActions.LOGIN_FAIL:
-      return {
-        ...state,
-        user: null,
-        authError: action.payload,
-        authSpinner: false,
-      };
-    case AuthActions.LOGOUT:
-      return {
-        ...state,
-        user: null,
-        authError: null,
-        authSpinner: false,
-      };
-    case AuthActions.RESET_ERROR:
-      return {
-        ...state,
-        authError: null,
-      };
-    default:
-      return state;
-  }
-}
+    })
+  ),
+
+  on(
+    AuthActions.Logout,
+    (state) => ({
+      ...state,
+      user: null,
+      authError: null,
+      authSpinner: false,
+    })
+  ),
+
+  on(
+    AuthActions.ResetError,
+    (state) => ({
+      ...state,
+      authError: null
+    })
+  )
+);

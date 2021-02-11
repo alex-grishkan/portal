@@ -39,12 +39,17 @@ export class AuthComponent implements OnInit {
   }
 
   onLogin() {
-    this.store.dispatch(
-      new AuthActions.LoginStart({
-        email: this.loginForm.get('email').value,
-        password: this.loginForm.get('password').value,
-      })
-    );
+    this.store.dispatch(AuthActions.LoginStart({
+      email: this.loginForm.get('email').value,
+      password: this.loginForm.get('password').value,
+    }));
+
+    // this.store.dispatch(
+    //   new AuthActions.LoginStart({
+    //     email: this.loginForm.get('email').value,
+    //     password: this.loginForm.get('password').value,
+    //   })
+    // );
 
     // // this.store.dispatch(new ResultActions.LoadStart());
     // setTimeout(() => {
@@ -94,7 +99,11 @@ export class AuthComponent implements OnInit {
     // this.router.navigate(['/results']);
   }
 
+  onForgotPassword() {
+    this.store.dispatch(AuthActions.ForgotPasswordStart({ email: this.loginForm.get('email').value }))
+  }
+
   onResetError() {
-    this.store.dispatch(new AuthActions.ResetError());
+    this.store.dispatch(AuthActions.ResetError());
   }
 }

@@ -5,7 +5,9 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from '../store/app.reducer';
 import * as AppActions from '../store/app.actions';
+import * as AuthActions from '../auth/store/auth.actions';
 import * as ProfileActions from '../profile/store/profile.actions';
+import * as ResultActions from '../result-list/store/result-list.actions';
 
 const ValidatorForm: ValidatorFn = (control: FormGroup): {[key: string]: boolean} | null => {
   const newPassword = control.get('newPassword').value;
@@ -62,19 +64,25 @@ export class ProfileComponent implements OnInit {
   }
 
   onSave() {
-    this.store.dispatch(new AppActions.AppStyle({ appDarkMode: this.profileForm.get('appDarkMode').value }));
+    this.store.dispatch(AppActions.AppStyle({ appDarkMode: this.profileForm.get('appDarkMode').value }));
 
     const newEmail = this.profileForm.get('newEmail').value;
     if (newEmail) {
-      this.store.dispatch(new ProfileActions.ResetAuthStart({ idToken: this.token, email: newEmail, password: null }));
+      this.store.dispatch(ProfileActions.ResetAuthStart({ idToken: this.token, email: newEmail, password: null }));
       return;
     }
     const newPassword = this.profileForm.get('newPassword').value;
     if (newPassword) {
-      this.store.dispatch(new ProfileActions.ResetAuthStart({ idToken: this.token, email: null, password: newPassword }));
+      this.store.dispatch(ProfileActions.ResetAuthStart({ idToken: this.token, email: null, password: newPassword }));
       return;
     }
 
     this.router.navigate(['results']);
+  }
+
+  onResetError() {
+    this.store.dispatch(AuthActions.Logout());
+    this.store.dispatch(new ResultActions.Reset());
+    this.router.navigate(['']);
   }
 }

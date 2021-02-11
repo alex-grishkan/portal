@@ -1,16 +1,21 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
-export class AppSpinner implements Action {
-  readonly type = APP_SPINNER;
-  constructor(public payload: boolean) {}
-}
+// export class AppSpinner implements Action {
+//   readonly type = APP_SPINNER;
+//   constructor(public payload: boolean) {}
+// }
 
-export class AppStyle implements Action {
-  readonly type = APP_STYLE;
-  constructor(public payload: { appDarkMode: boolean }) {}
-}
+export const AppSpinner = createAction(
+  '[App] App Spinner',
+  props<{ on: boolean }>()
+);
 
-export const APP_SPINNER = '[App] App Spinner';
-export const APP_STYLE = '[App] App Style';
+// export class AppStyle implements Action {
+//   readonly type = APP_STYLE;
+//   constructor(public payload: { appDarkMode: boolean }) {}
+// }
 
-export type AppActions = AppSpinner | AppStyle;
+export const AppStyle = createAction(
+  '[App] App Style',
+  props<{ appDarkMode: boolean }>()
+);

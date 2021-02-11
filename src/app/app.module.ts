@@ -25,6 +25,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+
 import { environment } from '../environments/environment';
 
 import { AlertComponent } from './shared/alert/alert/alert.component';
@@ -78,6 +80,7 @@ import { ProfileEffects } from './profile/store/profile.effects';
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     EffectsModule.forRoot([AuthEffects, ResultEffects, ProfileEffects]),
+    NgIdleKeepaliveModule
   ],
   providers: [
     {

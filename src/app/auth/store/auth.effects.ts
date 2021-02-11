@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { switchMap, map, catchError, tap } from 'rxjs/operators';
-import { Actions, ofType, Effect } from '@ngrx/effects';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 
 import { environment } from 'src/environments/environment';
 
-import * as fromApp from '../../store/app.reducer';
 import * as AuthActions from './auth.actions';
 import * as ResultActions from '../../result-list/store/result-list.actions';
-import { User } from '../user.model';
 
 export interface AuthResponseData {
   idToken: string;
@@ -24,88 +21,105 @@ export interface AuthResponseData {
 
 const handleSuccess = (email: string, userId: string, token: string, expiresIn: number) => {
   const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-  const user = new User(email, userId, token, expirationDate);
-  localStorage.setItem('userData', JSON.stringify(user));
-
-  return new AuthActions.LoginSuccess({
-    email: email,
-    userId: userId,
-    token: token,
-    expirationDate: expirationDate,
-  });
+  return AuthActions.LoginSuccess({ email: email, userId: userId, token: token, expirationDate: expirationDate });
 };
 
 const handleError = (errorRes: any) => {
   let errorMessage = 'An unknown error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
-    return of(new AuthActions.LoginFail(errorMessage));
+    return of(AuthActions.LoginFail({ errorMessage: errorMessage }));
   }
   switch (errorRes.error.error.message) {
-    case 'EMAIL_EXISTS':
-      errorMessage = 'This email exists already';
+    case 'USER_DISABLED':
+      errorMessage = 'The user account has been disabled by an administrator';
       break;
     case 'EMAIL_NOT_FOUND':
-      errorMessage = 'This email does not exist.';
+      errorMessage = 'This email could not be found';
       break;
     case 'INVALID_PASSWORD':
-      errorMessage = 'This password is not correct.';
+      errorMessage = 'This password is invalid';
+      break;
+    case 'INVALID_PASSWORD':
+      errorMessage = 'This password is invalid';
       break;
   }
-  return of(new AuthActions.LoginFail(errorMessage));
+  return of(AuthActions.LoginFail({ errorMessage: errorMessage }));
 };
 
 @Injectable()
 export class AuthEffects {
-  @Effect()
-  authLogin = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_START),
-    switchMap((action: AuthActions.LoginStart) => {
-      return this.http
-        .post<AuthResponseData>(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' +
-            environment.firebaseAPIKey,
-          {
-            email: action.payload.email,
-            password: action.payload.password,
-            returnSecureToken: true,
-          }
-        )
-        .pipe(
-          map((resData) => {
-            return handleSuccess(
-              resData.email,
-              resData.localId,
-              resData.idToken,
-              +resData.expiresIn
-            );
-          }),
-          catchError((errorRes) => {
-            return handleError(errorRes);
-          })
-        );
-    })
-  );
 
-  @Effect()
-  loginSuccess = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_SUCCESS),
-    map(() => {
-      return new ResultActions.LoadStart();
-    })
-  );
+  authLogin = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.LoginStart),
+      switchMap(action => {
+        return this.http
+          .post<AuthResponseData>(
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIKey,
+            {
+              email: action.email,
+              password: action.password,
+              returnSecureToken: true,
+            }
+          )
+          .pipe(
+            map((resData) => {
+              return handleSuccess(resData.email, resData.localId, resData.idToken, +resData.expiresIn)
+            }),
+            catchError((errorRes) => {
+              return handleError(errorRes);
+            })
+          );
+      })
+    )
+  )
 
-  @Effect({ dispatch: false })
-  authRedirect = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/results']);
-    })
-  );
+  loginSuccess = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.LoginSuccess),
+      map(() => {
+        return new ResultActions.LoadStart();
+      })
+    )
+  )
+
+  authRedirect = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.LoginSuccess),
+      tap(() => {
+        this.router.navigate(['/results']);
+      })
+    ), { dispatch: false }
+  )
+
+  forgotPassword = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.ForgotPasswordStart),
+      switchMap(action => {
+        console.log(action.email);
+        return this.http
+          .post(
+            'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=' + environment.firebaseAPIKey,
+            {
+              email: action.email,
+              requestType: 'PASSWORD_RESET'
+            }
+          )
+          .pipe(
+            map((resData) => {
+              return AuthActions.ForgotPasswordSuccess();
+            }),
+            catchError((errorRes) => {
+              return handleError(errorRes);
+            })
+          );
+      })
+    )
+  )
 
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private router: Router,
-    private store: Store<fromApp.AppState>
+    private router: Router
   ) {}
 }
