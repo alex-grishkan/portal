@@ -8,7 +8,6 @@ import { Store } from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import { Result } from './result.model';
 import { ResultViewComponent } from '../result-view/result-view.component';
-import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-result-list',
@@ -28,6 +27,7 @@ export class ResultListComponent implements OnInit, AfterViewInit {
   ];
   resultError = null;
   resultSpinner = false;
+  idleDialog = null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

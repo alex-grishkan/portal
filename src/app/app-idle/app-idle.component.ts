@@ -18,5 +18,4 @@ export class AppIdleComponent implements OnInit {
       this.countdown = state.appIdleCountdown;
     })
   }
-
 }

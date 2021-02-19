@@ -43,6 +43,7 @@ import * as fromApp from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { ResultEffects } from './result-list/store/result-list.effects';
 import { ProfileEffects } from './profile/store/profile.effects';
+import { AppIdleComponent } from './app-idle/app-idle.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { ProfileEffects } from './profile/store/profile.effects';
     ProfileComponent,
     SpinnerComponent,
     AlertComponent,
+    AppIdleComponent
   ],
   imports: [
     BrowserModule,

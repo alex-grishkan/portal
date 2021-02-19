@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -7,8 +8,6 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
-
-import { MatDialog } from '@angular/material/dialog';
 
 import * as AppActions from '../app/store/app.actions';
 import * as AuthActions from '../app/auth/store/auth.actions';
@@ -28,7 +27,7 @@ export class AppComponent implements OnInit,OnDestroy {
   idleState: string = 'Not started';
   timedOut: boolean = false;
   private subscriptions = new Subscription();
-  mod = null;
+  idleDialog = null;
 
   @HostBinding('class') activeThemeCssClass: string;
 
@@ -42,7 +41,7 @@ export class AppComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.idle.setIdle(5);
-    this.idle.setTimeout(5);
+    this.idle.setTimeout(10);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     this.subscriptions.add(this.idle.onIdleEnd.subscribe(() => {
@@ -60,14 +59,7 @@ export class AppComponent implements OnInit,OnDestroy {
     }));
     this.subscriptions.add(this.idle.onTimeoutWarning.subscribe((countdown: number) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds';
-      if (!this.mod) {
-        this.mod = this.modWindow
-          .open(AppIdleComponent)
-          .updateSize('50vw', '60vh');
-      } else {
-        //this.idleService.idle.next(countdown);
-        this.store.dispatch(AppActions.AppIdleCountdown({ appIdleCountdown: countdown}));
-      }
+      this.openIdleDialog(countdown);
     }));
 
     this.store.select('auth').subscribe((auth) => {
@@ -117,5 +109,16 @@ export class AppComponent implements OnInit,OnDestroy {
 
   toggleDark() {
     this.setActiveTheme(!this.darkMode);
+  }
+
+  openIdleDialog(countdown: number) {
+    if (!this.idleDialog) {
+      this.idleDialog = this.modWindow
+        .open(AppIdleComponent)
+        .updateSize('50vw', '40vh')
+        //.disableClose = true
+    } else {
+      this.store.dispatch(AppActions.AppIdleCountdown({ appIdleCountdown: countdown}));
+    }
   }
 }

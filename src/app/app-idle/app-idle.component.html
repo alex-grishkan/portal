@@ -1,10 +1,10 @@
-<p mat-dialog-title>You've been idle for a while</p>
+<p mat-dialog-title>Idle timeout warning</p>
 
 <div class="modal-view-details" style="height: 80%">
-  {{ countdown }}
+  Your session will timeout in {{ countdown }} second{{ countdown==1 ? "" : "s" }}
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-flat-button color="primary" mat-dialog-close>Stay</button>
-	<!-- <button mat-flat-button color="primary" mat-dialog-close>Logoff</button> -->
+  <button mat-flat-button color="primary">Extend my Session</button>
+	<button mat-flat-button>Logout Now</button>
 </div>
