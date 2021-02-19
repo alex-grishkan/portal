@@ -1,25 +1,34 @@
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
+import { MatDialog } from '@angular/material/dialog';
+
+import * as AppActions from '../app/store/app.actions';
 import * as AuthActions from '../app/auth/store/auth.actions';
 import * as ResultActions from '../app/result-list/store/result-list.actions';
 import * as fromApp from '../app/store/app.reducer';
+import { AppIdleComponent } from './app-idle/app-idle.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
+
+export class AppComponent implements OnInit,OnDestroy {
   appSpinner: boolean = false;
   darkMode: boolean = false;
-  idleState: string = 'Not started.';
+  idleState: string = 'Not started';
   timedOut: boolean = false;
+  private subscriptions = new Subscription();
+  mod = null;
 
   @HostBinding('class') activeThemeCssClass: string;
 
@@ -27,40 +36,66 @@ export class AppComponent implements OnInit {
     private store: Store<fromApp.AppState>,
     private overlayContainer: OverlayContainer,
     private router: Router,
-    private idle: Idle
-  ) {
-    idle.setIdle(5);
-    idle.setTimeout(5);
-    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    idle.onIdleEnd.subscribe(() => {
-      this.idleState = 'No longer idle.';
-    });
-    idle.onTimeout.subscribe(() => {
-      this.idleState = 'Timed out!';
+    private idle: Idle,
+    private modWindow: MatDialog
+  ) { }
+
+  ngOnInit() {
+    this.idle.setIdle(5);
+    this.idle.setTimeout(5);
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    this.subscriptions.add(this.idle.onIdleEnd.subscribe(() => {
+      this.idleState = 'No longer idle';
+    }));
+    this.subscriptions.add(this.idle.onTimeout.subscribe(() => {
+      this.idleState = 'Timed out';
       this.timedOut = true;
       this.store.dispatch(AuthActions.Logout());
       this.store.dispatch(new ResultActions.Reset());
       this.router.navigate(['']);
-    });
-    idle.onIdleStart.subscribe(() => {
-      this.idleState = 'You\'ve gone idle!';
-    });
-    idle.onTimeoutWarning.subscribe((countdown: number) => {
-      this.idleState = 'You will time out in ' + countdown + ' seconds!';
+    }));
+    this.subscriptions.add(this.idle.onIdleStart.subscribe(() => {
+      this.idleState = 'You\'ve gone idle';
+    }));
+    this.subscriptions.add(this.idle.onTimeoutWarning.subscribe((countdown: number) => {
+      this.idleState = 'You will time out in ' + countdown + ' seconds';
+      if (!this.mod) {
+        this.mod = this.modWindow
+          .open(AppIdleComponent)
+          .updateSize('50vw', '60vh');
+      } else {
+        //this.idleService.idle.next(countdown);
+        this.store.dispatch(AppActions.AppIdleCountdown({ appIdleCountdown: countdown}));
+      }
+    }));
+
+    this.store.select('auth').subscribe((auth) => {
+      if (auth.user) {
+        this.idle.watch();
+        this.timedOut = false; 
+      } else {
+        this.idle.stop();
+      }
     });
 
-    this.idle.watch();
-    this.idleState = 'Started.';
-    this.timedOut = false;
-   }
-
-  ngOnInit() {
     this.store.select('app').subscribe((progress) => {
       this.appSpinner = progress.appSpinner;
     });
+
     this.store.select('app').subscribe((style) => {
       this.setActiveTheme(style.appDarkMode);
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  resetIdle() {
+    this.idle.watch();
+    this.idleState = 'Started';
+    this.timedOut = false;
   }
 
   setActiveTheme(darkMode: boolean) {

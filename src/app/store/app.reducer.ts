@@ -8,13 +8,13 @@ import * as AppActions from './app.actions';
 export interface State {
   appSpinner: boolean;
   appDarkMode: boolean;
+  appIdleCountdown: number;
 }
 
 const initialState: State = {
   appSpinner: false,
-  appDarkMode:
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  appDarkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+  appIdleCountdown: null
 };
 
 export const App_Reducer = createReducer(
@@ -32,6 +32,14 @@ export const App_Reducer = createReducer(
     (state, action) => ({
       ...state,
       appDarkMode: action.appDarkMode
+    })
+  ),
+
+  on(
+    AppActions.AppIdleCountdown,
+    (state, action) => ({
+      ...state,
+      appIdleCountdown: action.appIdleCountdown
     })
   )
 )
