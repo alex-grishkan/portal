@@ -1,6 +1,6 @@
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -24,10 +24,8 @@ import { AppIdleComponent } from './app-idle/app-idle.component';
 export class AppComponent implements OnInit,OnDestroy {
   appSpinner: boolean = false;
   darkMode: boolean = false;
-  idleState: string = 'Not started';
-  timedOut: boolean = false;
   private subscriptions = new Subscription();
-  idleDialog = null;
+  private idleDialogRef: MatDialogRef<AppIdleComponent>;
 
   @HostBinding('class') activeThemeCssClass: string;
 
@@ -40,32 +38,42 @@ export class AppComponent implements OnInit,OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.idle.setIdle(5);
-    this.idle.setTimeout(10);
+    this.idle.setIdle(300);
+    this.idle.setTimeout(30);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    this.subscriptions.add(this.idle.onIdleEnd.subscribe(() => {
-      this.idleState = 'No longer idle';
-    }));
     this.subscriptions.add(this.idle.onTimeout.subscribe(() => {
-      this.idleState = 'Timed out';
-      this.timedOut = true;
+      this.idle.stop();
+      this.modWindow.closeAll();
       this.store.dispatch(AuthActions.Logout());
       this.store.dispatch(new ResultActions.Reset());
       this.router.navigate(['']);
     }));
-    this.subscriptions.add(this.idle.onIdleStart.subscribe(() => {
-      this.idleState = 'You\'ve gone idle';
-    }));
+
     this.subscriptions.add(this.idle.onTimeoutWarning.subscribe((countdown: number) => {
-      this.idleState = 'You will time out in ' + countdown + ' seconds';
-      this.openIdleDialog(countdown);
+      if (!this.idleDialogRef) {
+        this.idleDialogRef = this.modWindow.open(AppIdleComponent);
+        this.idleDialogRef.disableClose = true;
+
+        this.subscriptions.add(this.idleDialogRef.afterClosed().subscribe((idleDialog) => {
+          this.idleDialogRef = null;
+          if (!idleDialog) return;
+          if (idleDialog.event == 'extendSession') {
+            this.idle.watch();
+          } else {
+            this.modWindow.closeAll();
+            this.store.dispatch(AuthActions.Logout());
+            this.store.dispatch(new ResultActions.Reset());
+            this.router.navigate(['']);
+          }
+        }));
+      };
+      this.store.dispatch(AppActions.AppIdleCountdown({ appIdleCountdown: countdown}));
     }));
 
     this.store.select('auth').subscribe((auth) => {
       if (auth.user) {
         this.idle.watch();
-        this.timedOut = false; 
       } else {
         this.idle.stop();
       }
@@ -84,12 +92,6 @@ export class AppComponent implements OnInit,OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  resetIdle() {
-    this.idle.watch();
-    this.idleState = 'Started';
-    this.timedOut = false;
-  }
-
   setActiveTheme(darkMode: boolean) {
     if (this.darkMode === darkMode) return;
     this.darkMode = darkMode;
@@ -104,21 +106,6 @@ export class AppComponent implements OnInit,OnDestroy {
         classList.add(cssClass);
       }
       this.activeThemeCssClass = cssClass;
-    }
-  }
-
-  toggleDark() {
-    this.setActiveTheme(!this.darkMode);
-  }
-
-  openIdleDialog(countdown: number) {
-    if (!this.idleDialog) {
-      this.idleDialog = this.modWindow
-        .open(AppIdleComponent)
-        .updateSize('50vw', '40vh')
-        //.disableClose = true
-    } else {
-      this.store.dispatch(AppActions.AppIdleCountdown({ appIdleCountdown: countdown}));
     }
   }
 }
